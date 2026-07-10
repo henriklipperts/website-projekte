@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ristorante Bella Vita — Demo-Projekt von Pixelhandwerk</title>
+<meta name="description" content="Demo-Projekt von Pixelhandwerk: moderner Webauftritt für ein Restaurant. Speisekarte, Reservierung und Öffnungszeiten auf einen Blick.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          wine: '#6E2A22',
+          wineDark: '#3E1712',
+          cream: '#FBF5EC',
+          gold: '#C9A227',
+          ink: '#2A211C',
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #FBF5EC; }
+
+  .grain {
+    background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  #navbar { transition: background-color .35s ease, box-shadow .35s ease; }
+  #navbar.nav-solid { background-color: rgba(251,245,236,0.95); backdrop-filter: blur(8px); box-shadow: 0 1px 0 rgba(110,42,34,0.1); }
+
+  .nav-link { position: relative; }
+  .nav-link::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:1.5px; background:#C9A227; transition:width .25s ease; }
+  .nav-link:hover::after { width:100%; }
+
+  #mobileMenu { transition: transform .4s cubic-bezier(.4,0,.2,1); }
+
+  .dish-plate {
+    width: 64px; height: 64px; border-radius: 999px;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 28px;
+    box-shadow: inset 0 0 0 1px rgba(110,42,34,0.15);
+  }
+
+  .photo-block { position:relative; overflow:hidden; }
+  .photo-block::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.35)); }
+
+  .card-hover { transition: transform .3s ease, box-shadow .3s ease; }
+  .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -20px rgba(62,23,18,0.35); }
+
+  ::selection { background: #C9A227; color: white; }
+</style>
+</head>
+
+<body class="text-ink font-sans antialiased">
+
+<!-- Back-to-agency banner -->
+<div class="bg-wineDark text-cream text-xs sm:text-sm font-mono py-2 px-4 text-center relative z-[60]">
+  Demo-Projekt von <a href="index.html" class="underline hover:text-gold transition-colors">Pixelhandwerk</a> — so könnte Ihre Webseite aussehen.
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<header id="navbar" class="sticky top-0 z-50">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2">
+      <span class="font-display font-bold text-xl text-wine">Bella Vita</span>
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-9 font-medium text-sm text-ink/80" id="desktopNav">
+      <li><a href="#ueber" class="nav-link hover:text-wine transition-colors">Über uns</a></li>
+      <li><a href="#speisekarte" class="nav-link hover:text-wine transition-colors">Speisekarte</a></li>
+      <li><a href="#galerie" class="nav-link hover:text-wine transition-colors">Galerie</a></li>
+      <li><a href="#kontakt" class="nav-link hover:text-wine transition-colors">Kontakt</a></li>
+    </ul>
+
+    <div class="flex items-center gap-4">
+      <a href="#kontakt" class="hidden lg:inline-flex items-center gap-2 bg-wine hover:bg-wineDark text-cream text-sm font-semibold px-5 py-2.5 rounded-full transition-colors">
+        Tisch reservieren
+      </a>
+      <button id="menuBtn" aria-label="Menü öffnen" class="lg:hidden w-10 h-10 flex items-center justify-center text-wine">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div id="menuOverlay" class="fixed inset-0 bg-wineDark/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+<div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-cream z-50 translate-x-full shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between h-20 px-6 border-b border-wine/10">
+    <span class="font-display font-bold text-wine">Menü</span>
+    <button id="closeMenuBtn" aria-label="Menü schließen" class="w-10 h-10 flex items-center justify-center text-wine">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <ul class="flex flex-col gap-1 p-6 font-medium text-ink">
+    <li><a href="#ueber" class="mobile-link block py-3 border-b border-wine/10">Über uns</a></li>
+    <li><a href="#speisekarte" class="mobile-link block py-3 border-b border-wine/10">Speisekarte</a></li>
+    <li><a href="#galerie" class="mobile-link block py-3 border-b border-wine/10">Galerie</a></li>
+    <li><a href="#kontakt" class="mobile-link block py-3 border-b border-wine/10">Kontakt</a></li>
+  </ul>
+  <div class="p-6 mt-auto">
+    <a href="#kontakt" class="mobile-link block text-center bg-wine text-cream font-semibold px-5 py-3 rounded-full">Tisch reservieren</a>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section id="top" class="relative overflow-hidden bg-gradient-to-br from-wineDark via-wine to-[#8a3a2c] grain py-28 lg:py-40">
+  <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-gold mb-6">Ristorante · Italienische Küche</p>
+    <h1 data-aos="fade-up" data-aos-delay="80" class="font-display font-bold text-cream text-4xl sm:text-6xl leading-tight">Bella Vita</h1>
+    <p data-aos="fade-up" data-aos-delay="160" class="mt-6 text-cream/80 text-lg max-w-xl mx-auto leading-relaxed">
+      Authentische italienische Küche, ehrliche Zutaten und ein Ort, an dem man sich Zeit für gutes Essen nimmt.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="240" class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="#kontakt" class="inline-flex items-center gap-2 bg-gold hover:bg-amber-500 text-wineDark font-semibold px-7 py-3.5 rounded-full transition-colors">Tisch reservieren</a>
+      <a href="#speisekarte" class="inline-flex items-center gap-2 border border-cream/30 hover:border-cream/70 text-cream font-semibold px-7 py-3.5 rounded-full transition-colors">Speisekarte ansehen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÜBER UNS ===================== -->
+<section id="ueber" class="scroll-mt-24 py-24 lg:py-28">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <div data-aos="fade-up" class="order-2 lg:order-1">
+      <p class="font-mono text-xs tracking-[0.3em] uppercase text-gold mb-4">Unsere Geschichte</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-wine mb-6">Familientradition seit 1987.</h2>
+      <p class="text-ink/70 leading-relaxed mb-4">
+        Was als kleine Trattoria in der Altstadt begann, ist heute ein Ort, an dem drei Generationen
+        ihre Liebe zur italienischen Küche weitergeben. Jedes Gericht entsteht aus frischen,
+        saisonalen Zutaten — nach Rezepten, die bei uns zu Hause seit Jahrzehnten auf den Tisch kommen.
+      </p>
+      <p class="text-ink/70 leading-relaxed">
+        Bei uns sind Sie nicht Gast Nummer soundso, sondern Teil der Familie Bella Vita.
+      </p>
+      <div class="mt-10 grid grid-cols-3 gap-6">
+        <div>
+          <div class="font-display font-bold text-3xl text-wine">35+</div>
+          <div class="text-xs text-ink/50 mt-1 font-mono">Jahre Erfahrung</div>
+        </div>
+        <div>
+          <div class="font-display font-bold text-3xl text-wine">120</div>
+          <div class="text-xs text-ink/50 mt-1 font-mono">Sitzplätze</div>
+        </div>
+        <div>
+          <div class="font-display font-bold text-3xl text-wine">4.8★</div>
+          <div class="text-xs text-ink/50 mt-1 font-mono">Bewertung</div>
+        </div>
+      </div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="120" class="order-1 lg:order-2">
+      <div class="aspect-[4/5] rounded-2xl bg-gradient-to-br from-wine to-wineDark grain flex items-center justify-center relative overflow-hidden shadow-xl">
+        <span class="text-8xl">🍝</span>
+        <div class="absolute bottom-6 left-6 right-6 bg-cream/95 rounded-xl p-4">
+          <p class="font-display font-semibold text-wine text-sm">Tagliatelle al Tartufo</p>
+          <p class="text-xs text-ink/50 mt-0.5">Hausgemachte Pasta, schwarzer Trüffel</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SPEISEKARTE ===================== -->
+<section id="speisekarte" class="scroll-mt-24 py-24 lg:py-28 bg-wine/[0.04]">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center mb-14">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-gold mb-4">Speisekarte</p>
+    <h2 data-aos="fade-up" data-aos-delay="60" class="font-display font-bold text-3xl sm:text-4xl text-wine">Eine kleine Auswahl.</h2>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 lg:px-8 grid sm:grid-cols-2 gap-6">
+
+    <div data-aos="fade-up" class="card-hover flex gap-5 bg-cream rounded-2xl p-6 border border-wine/10">
+      <div class="dish-plate bg-white">🍝</div>
+      <div class="flex-1">
+        <div class="flex justify-between items-baseline gap-2"><h3 class="font-display font-semibold text-wine">Tagliatelle al Tartufo</h3><span class="font-mono text-sm text-gold shrink-0">18€</span></div>
+        <p class="text-sm text-ink/60 mt-1">Hausgemachte Pasta mit schwarzem Trüffel und Parmesan.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="80" class="card-hover flex gap-5 bg-cream rounded-2xl p-6 border border-wine/10">
+      <div class="dish-plate bg-white">🍕</div>
+      <div class="flex-1">
+        <div class="flex justify-between items-baseline gap-2"><h3 class="font-display font-semibold text-wine">Pizza Bella Vita</h3><span class="font-mono text-sm text-gold shrink-0">14€</span></div>
+        <p class="text-sm text-ink/60 mt-1">San-Marzano-Tomaten, Büffelmozzarella, Basilikum.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="160" class="card-hover flex gap-5 bg-cream rounded-2xl p-6 border border-wine/10">
+      <div class="dish-plate bg-white">🥗</div>
+      <div class="flex-1">
+        <div class="flex justify-between items-baseline gap-2"><h3 class="font-display font-semibold text-wine">Insalata Caprese</h3><span class="font-mono text-sm text-gold shrink-0">9€</span></div>
+        <p class="text-sm text-ink/60 mt-1">Tomaten, Mozzarella di Bufala, Basilikumöl.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="240" class="card-hover flex gap-5 bg-cream rounded-2xl p-6 border border-wine/10">
+      <div class="dish-plate bg-white">🍷</div>
+      <div class="flex-1">
+        <div class="flex justify-between items-baseline gap-2"><h3 class="font-display font-semibold text-wine">Tiramisù della Nonna</h3><span class="font-mono text-sm text-gold shrink-0">7€</span></div>
+        <p class="text-sm text-ink/60 mt-1">Nach Familienrezept, mit Espresso und Mascarpone.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== ÖFFNUNGSZEITEN / RESERVIERUNG ===================== -->
+<section class="py-24 lg:py-28">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-10">
+    <div data-aos="fade-up" class="bg-cream rounded-2xl border border-wine/10 p-8">
+      <h3 class="font-display font-semibold text-xl text-wine mb-5">Öffnungszeiten</h3>
+      <ul class="space-y-3 text-sm">
+        <li class="flex justify-between border-b border-wine/10 pb-3"><span class="text-ink/70">Montag – Freitag</span><span class="font-medium text-ink">17:00 – 23:00</span></li>
+        <li class="flex justify-between border-b border-wine/10 pb-3"><span class="text-ink/70">Samstag</span><span class="font-medium text-ink">12:00 – 23:30</span></li>
+        <li class="flex justify-between"><span class="text-ink/70">Sonntag</span><span class="font-medium text-ink">12:00 – 22:00</span></li>
+      </ul>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="100" class="bg-wine rounded-2xl p-8 flex flex-col justify-center text-center">
+      <h3 class="font-display font-semibold text-xl text-cream mb-3">Tisch reservieren</h3>
+      <p class="text-cream/70 text-sm mb-6">Rufen Sie uns an oder schreiben Sie uns — wir richten Ihren Tisch her.</p>
+      <a href="#kontakt" class="inline-flex mx-auto items-center gap-2 bg-gold hover:bg-amber-500 text-wineDark font-semibold px-6 py-3 rounded-full transition-colors">Jetzt reservieren</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALERIE ===================== -->
+<section id="galerie" class="scroll-mt-24 py-24 lg:py-28 bg-wine/[0.04]">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center mb-14">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-gold mb-4">Galerie</p>
+    <h2 data-aos="fade-up" data-aos-delay="60" class="font-display font-bold text-3xl sm:text-4xl text-wine">Ein Blick in unser Haus.</h2>
+  </div>
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div data-aos="fade-up" data-aos-delay="0" class="photo-block aspect-square rounded-xl bg-gradient-to-br from-wine to-wineDark flex items-center justify-center text-4xl">🍷</div>
+    <div data-aos="fade-up" data-aos-delay="60" class="photo-block aspect-square rounded-xl bg-gradient-to-br from-amber-700 to-wine flex items-center justify-center text-4xl">🍝</div>
+    <div data-aos="fade-up" data-aos-delay="120" class="photo-block aspect-square rounded-xl bg-gradient-to-br from-wineDark to-amber-900 flex items-center justify-center text-4xl">🕯️</div>
+    <div data-aos="fade-up" data-aos-delay="180" class="photo-block aspect-square rounded-xl bg-gradient-to-br from-wine to-amber-700 flex items-center justify-center text-4xl">🍕</div>
+  </div>
+</section>
+
+<!-- ===================== KONTAKT ===================== -->
+<section id="kontakt" class="scroll-mt-24 py-24 lg:py-28">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12">
+    <div data-aos="fade-up">
+      <p class="font-mono text-xs tracking-[0.3em] uppercase text-gold mb-4">Kontakt</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-wine mb-6">Wir freuen uns auf Sie.</h2>
+      <div class="space-y-4 text-ink/70">
+        <p class="flex gap-3"><svg class="w-5 h-5 text-wine shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Musterstraße 12, 10115 Berlin</p>
+        <p class="flex gap-3"><svg class="w-5 h-5 text-wine shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.98.8l.7 3.5a1 1 0 01-.27.94l-1.6 1.6a12.05 12.05 0 006.03 6.03l1.6-1.6a1 1 0 01.94-.27l3.5.7a1 1 0 01.8.98V19a2 2 0 01-2 2h-1C9.72 21 3 14.28 3 6V5z"/></svg>+49 30 1234567 (Demo)</p>
+        <p class="flex gap-3"><svg class="w-5 h-5 text-wine shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>info@bellavita-demo.de</p>
+      </div>
+    </div>
+    <form data-aos="fade-up" data-aos-delay="100" class="bg-cream rounded-2xl border border-wine/10 p-7">
+      <div class="grid gap-4">
+        <input type="text" placeholder="Name" class="w-full rounded-lg border border-wine/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+        <input type="text" placeholder="Datum &amp; Uhrzeit" class="w-full rounded-lg border border-wine/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+        <input type="number" placeholder="Anzahl Personen" class="w-full rounded-lg border border-wine/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+        <button type="submit" class="w-full bg-wine hover:bg-wineDark text-cream font-semibold px-6 py-3 rounded-full transition-colors">Reservierung anfragen</button>
+        <p class="text-xs text-ink/40 text-center">Demo-Formular — ohne echte Funktion.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="bg-wineDark py-12">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <span class="font-display font-bold text-cream text-lg">Bella Vita</span>
+    <p class="text-cream/50 text-sm text-center">Dies ist ein fiktives Demo-Projekt von <a href="index.html" class="underline hover:text-gold transition-colors">Pixelhandwerk</a>.</p>
+    <a href="index.html" class="inline-flex items-center gap-2 text-cream/70 hover:text-gold text-sm font-medium transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Zurück zu Pixelhandwerk
+    </a>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 700, once: true, offset: 40 });
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('nav-solid', window.scrollY > 20);
+  });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const closeMenuBtn = document.getElementById('closeMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  function openMenu() { mobileMenu.classList.remove('translate-x-full'); menuOverlay.classList.remove('opacity-0','pointer-events-none'); }
+  function closeMenu() { mobileMenu.classList.add('translate-x-full'); menuOverlay.classList.add('opacity-0','pointer-events-none'); }
+  menuBtn.addEventListener('click', openMenu);
+  closeMenuBtn.addEventListener('click', closeMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.mobile-link').forEach(el => el.addEventListener('click', closeMenu));
+</script>
+
+</body>
+</html>

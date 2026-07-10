@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tischlerei Schmidt — Demo-Projekt von Pixelhandwerk</title>
+<meta name="description" content="Demo-Projekt von Pixelhandwerk: moderner Webauftritt für einen Handwerksbetrieb. Leistungen, Referenzen und Kontakt auf einen Blick.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          charcoal: '#211D1A',
+          charcoalDark: '#151210',
+          wood: '#8A5A2B',
+          woodDark: '#5C3A1B',
+          amber: '#C9791F',
+          cream: '#F5F1EA',
+        },
+        fontFamily: {
+          display: ['Archivo', 'sans-serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #F5F1EA; }
+
+  .diagonal-lines {
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 14px);
+  }
+  #navbar { transition: background-color .35s ease, box-shadow .35s ease; }
+  #navbar.nav-solid { background-color: rgba(245,241,234,0.95); backdrop-filter: blur(8px); box-shadow: 0 1px 0 rgba(33,29,26,0.1); }
+
+  .nav-link { position: relative; }
+  .nav-link::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:#C9791F; transition:width .25s ease; }
+  .nav-link:hover::after { width:100%; }
+
+  #mobileMenu { transition: transform .4s cubic-bezier(.4,0,.2,1); }
+
+  .corner-tag { position:relative; }
+  .corner-tag::before, .corner-tag::after {
+    content:""; position:absolute; width:16px; height:16px; border-color:#C9791F; z-index:5;
+  }
+  .corner-tag::before { top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
+  .corner-tag::after { bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+
+  .card-hover { transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+  .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -20px rgba(33,29,26,0.3); border-color: rgba(201,121,31,0.5); }
+
+  ::selection { background: #C9791F; color: white; }
+</style>
+</head>
+
+<body class="text-charcoal font-sans antialiased">
+
+<!-- Back-to-agency banner -->
+<div class="bg-charcoalDark text-cream text-xs sm:text-sm font-mono py-2 px-4 text-center relative z-[60]">
+  Demo-Projekt von <a href="index.html" class="underline hover:text-amber transition-colors">Pixelhandwerk</a> — so könnte Ihre Webseite aussehen.
+</div>
+
+<!-- ===================== NAVBAR ===================== -->
+<header id="navbar" class="sticky top-0 z-50">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="#top" class="flex items-center gap-2.5">
+      <span class="w-9 h-9 rounded bg-charcoal flex items-center justify-center text-amber font-display font-bold text-sm">TS</span>
+      <span class="font-display font-bold text-lg text-charcoal">Tischlerei Schmidt</span>
+    </a>
+
+    <ul class="hidden lg:flex items-center gap-9 font-medium text-sm text-charcoal/80" id="desktopNav">
+      <li><a href="#leistungen" class="nav-link hover:text-amber transition-colors">Leistungen</a></li>
+      <li><a href="#ueber" class="nav-link hover:text-amber transition-colors">Über uns</a></li>
+      <li><a href="#referenzen" class="nav-link hover:text-amber transition-colors">Referenzen</a></li>
+      <li><a href="#kontakt" class="nav-link hover:text-amber transition-colors">Kontakt</a></li>
+    </ul>
+
+    <div class="flex items-center gap-4">
+      <a href="#kontakt" class="hidden lg:inline-flex items-center gap-2 bg-charcoal hover:bg-charcoalDark text-cream text-sm font-semibold px-5 py-2.5 rounded-full transition-colors">
+        Kostenlos anfragen
+      </a>
+      <button id="menuBtn" aria-label="Menü öffnen" class="lg:hidden w-10 h-10 flex items-center justify-center text-charcoal">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div id="menuOverlay" class="fixed inset-0 bg-charcoalDark/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+<div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-cream z-50 translate-x-full shadow-2xl flex flex-col">
+  <div class="flex items-center justify-between h-20 px-6 border-b border-charcoal/10">
+    <span class="font-display font-bold text-charcoal">Menü</span>
+    <button id="closeMenuBtn" aria-label="Menü schließen" class="w-10 h-10 flex items-center justify-center text-charcoal">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <ul class="flex flex-col gap-1 p-6 font-medium text-charcoal">
+    <li><a href="#leistungen" class="mobile-link block py-3 border-b border-charcoal/10">Leistungen</a></li>
+    <li><a href="#ueber" class="mobile-link block py-3 border-b border-charcoal/10">Über uns</a></li>
+    <li><a href="#referenzen" class="mobile-link block py-3 border-b border-charcoal/10">Referenzen</a></li>
+    <li><a href="#kontakt" class="mobile-link block py-3 border-b border-charcoal/10">Kontakt</a></li>
+  </ul>
+  <div class="p-6 mt-auto">
+    <a href="#kontakt" class="mobile-link block text-center bg-charcoal text-cream font-semibold px-5 py-3 rounded-full">Kostenlos anfragen</a>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section id="top" class="relative overflow-hidden bg-gradient-to-br from-charcoalDark via-charcoal to-woodDark diagonal-lines py-28 lg:py-40">
+  <div class="relative max-w-4xl mx-auto px-6 lg:px-8">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-amber mb-6">Meisterbetrieb seit 1992</p>
+    <h1 data-aos="fade-up" data-aos-delay="80" class="font-display font-extrabold text-cream text-4xl sm:text-6xl leading-[1.05] max-w-2xl">Möbel &amp; Innenausbau nach Maß.</h1>
+    <p data-aos="fade-up" data-aos-delay="160" class="mt-6 text-cream/70 text-lg max-w-xl leading-relaxed">
+      Von der Einbauküche bis zur kompletten Innenausstattung — handgefertigt in unserer Werkstatt,
+      geplant bis ins Detail.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="240" class="mt-10 flex flex-col sm:flex-row gap-4">
+      <a href="#kontakt" class="inline-flex items-center gap-2 bg-amber hover:bg-orange-600 text-charcoalDark font-semibold px-7 py-3.5 rounded-full transition-colors">Kostenlos anfragen</a>
+      <a href="#referenzen" class="inline-flex items-center gap-2 border border-cream/25 hover:border-cream/60 text-cream font-semibold px-7 py-3.5 rounded-full transition-colors">Referenzen ansehen</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEISTUNGEN ===================== -->
+<section id="leistungen" class="scroll-mt-24 py-24 lg:py-28">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center mb-14">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-amber mb-4">Leistungen</p>
+    <h2 data-aos="fade-up" data-aos-delay="60" class="font-display font-bold text-3xl sm:text-4xl text-charcoal">Aus einer Hand gefertigt.</h2>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid sm:grid-cols-2 gap-6">
+
+    <div data-aos="fade-up" class="card-hover flex gap-5 bg-white rounded-2xl p-6 border border-charcoal/10">
+      <div class="w-12 h-12 rounded-lg bg-amber/10 flex items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-amber" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h16"/></svg>
+      </div>
+      <div>
+        <h3 class="font-display font-semibold text-charcoal mb-1.5">Möbelbau nach Maß</h3>
+        <p class="text-sm text-charcoal/60 leading-relaxed">Einzelstücke, exakt auf Ihren Raum und Ihren Stil zugeschnitten.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="80" class="card-hover flex gap-5 bg-white rounded-2xl p-6 border border-charcoal/10">
+      <div class="w-12 h-12 rounded-lg bg-amber/10 flex items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-amber" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l8-4v18M13 21V11l6 3v7M9 9h.01M9 13h.01M9 17h.01"/></svg>
+      </div>
+      <div>
+        <h3 class="font-display font-semibold text-charcoal mb-1.5">Innenausbau</h3>
+        <p class="text-sm text-charcoal/60 leading-relaxed">Einbauschränke, Küchen und Raumgestaltung aus einer Hand.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="160" class="card-hover flex gap-5 bg-white rounded-2xl p-6 border border-charcoal/10">
+      <div class="w-12 h-12 rounded-lg bg-amber/10 flex items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-amber" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4h2m-1 0v16m-7-8h14"/></svg>
+      </div>
+      <div>
+        <h3 class="font-display font-semibold text-charcoal mb-1.5">Renovierung &amp; Sanierung</h3>
+        <p class="text-sm text-charcoal/60 leading-relaxed">Alte Bausubstanz fachgerecht erneuern — von Böden bis Türen.</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up" data-aos-delay="240" class="card-hover flex gap-5 bg-white rounded-2xl p-6 border border-charcoal/10">
+      <div class="w-12 h-12 rounded-lg bg-amber/10 flex items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-amber" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-display font-semibold text-charcoal mb-1.5">Reparaturen</h3>
+        <p class="text-sm text-charcoal/60 leading-relaxed">Schnelle, saubere Reparatur von Möbeln, Türen und Fenstern.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== ÜBER UNS ===================== -->
+<section id="ueber" class="scroll-mt-24 py-24 lg:py-28 bg-charcoal/[0.03]">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-14 items-center">
+    <div data-aos="fade-up">
+      <div class="corner-tag aspect-[4/3] rounded-2xl bg-gradient-to-br from-woodDark to-wood flex items-center justify-center text-7xl shadow-lg">
+        🪚
+      </div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="100">
+      <p class="font-mono text-xs tracking-[0.3em] uppercase text-amber mb-4">Unsere Werkstatt</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-charcoal mb-6">Drei Generationen Handwerk.</h2>
+      <p class="text-charcoal/70 leading-relaxed mb-4">
+        Gegründet 1992 von Meister Klaus Schmidt, führen heute seine Kinder den Betrieb weiter —
+        mit demselben Anspruch an Präzision und Materialqualität wie am ersten Tag.
+      </p>
+      <p class="text-charcoal/70 leading-relaxed">
+        Jedes Projekt beginnt mit einem Vor-Ort-Termin, einer maßgenauen Planung und endet erst,
+        wenn Sie hundertprozentig zufrieden sind.
+      </p>
+      <div class="mt-10 grid grid-cols-3 gap-6">
+        <div><div class="font-display font-bold text-3xl text-amber">30+</div><div class="text-xs text-charcoal/50 mt-1 font-mono">Jahre am Markt</div></div>
+        <div><div class="font-display font-bold text-3xl text-amber">450+</div><div class="text-xs text-charcoal/50 mt-1 font-mono">Projekte</div></div>
+        <div><div class="font-display font-bold text-3xl text-amber">6</div><div class="text-xs text-charcoal/50 mt-1 font-mono">Mitarbeiter</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFERENZEN ===================== -->
+<section id="referenzen" class="scroll-mt-24 py-24 lg:py-28">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8 text-center mb-14">
+    <p data-aos="fade-up" class="font-mono text-xs tracking-[0.3em] uppercase text-amber mb-4">Referenzen</p>
+    <h2 data-aos="fade-up" data-aos-delay="60" class="font-display font-bold text-3xl sm:text-4xl text-charcoal">Ausgewählte Projekte.</h2>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div data-aos="fade-up" data-aos-delay="0" class="corner-tag rounded-xl overflow-hidden">
+      <div class="aspect-square bg-gradient-to-br from-wood to-woodDark flex items-center justify-center text-4xl">🚪</div>
+      <div class="bg-white p-4"><p class="font-display font-semibold text-sm text-charcoal">Einbauschrank Flur</p><p class="text-xs text-charcoal/50">Privatwohnung, Hamburg</p></div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="80" class="corner-tag rounded-xl overflow-hidden">
+      <div class="aspect-square bg-gradient-to-br from-woodDark to-charcoal flex items-center justify-center text-4xl">🍽️</div>
+      <div class="bg-white p-4"><p class="font-display font-semibold text-sm text-charcoal">Massivholz-Esstisch</p><p class="text-xs text-charcoal/50">Einzelanfertigung</p></div>
+    </div>
+    <div data-aos="fade-up" data-aos-delay="160" class="corner-tag rounded-xl overflow-hidden">
+      <div class="aspect-square bg-gradient-to-br from-amber to-woodDark flex items-center justify-center text-4xl">🏠</div>
+      <div class="bg-white p-4"><p class="font-display font-semibold text-sm text-charcoal">Dachgeschoss-Ausbau</p><p class="text-xs text-charcoal/50">Einfamilienhaus, Lübeck</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KONTAKT ===================== -->
+<section id="kontakt" class="scroll-mt-24 py-24 lg:py-28 bg-charcoal/[0.03]">
+  <div class="max-w-5xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-12">
+    <div data-aos="fade-up">
+      <p class="font-mono text-xs tracking-[0.3em] uppercase text-amber mb-4">Kontakt</p>
+      <h2 class="font-display font-bold text-3xl sm:text-4xl text-charcoal mb-6">Lassen Sie uns planen.</h2>
+      <div class="space-y-4 text-charcoal/70 mb-8">
+        <p class="flex gap-3"><svg class="w-5 h-5 text-amber shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Werkstattweg 4, 23552 Lübeck</p>
+        <p class="flex gap-3"><svg class="w-5 h-5 text-amber shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.98.8l.7 3.5a1 1 0 01-.27.94l-1.6 1.6a12.05 12.05 0 006.03 6.03l1.6-1.6a1 1 0 01.94-.27l3.5.7a1 1 0 01.8.98V19a2 2 0 01-2 2h-1C9.72 21 3 14.28 3 6V5z"/></svg>+49 451 1234567 (Demo)</p>
+        <p class="flex gap-3"><svg class="w-5 h-5 text-amber shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>info@tischlerei-schmidt-demo.de</p>
+      </div>
+      <div class="bg-white rounded-xl border border-charcoal/10 p-5">
+        <p class="font-display font-semibold text-charcoal text-sm mb-2">Werkstatt-Öffnungszeiten</p>
+        <p class="text-sm text-charcoal/60">Mo–Fr 8:00–17:00 Uhr · Termine nach Vereinbarung</p>
+      </div>
+    </div>
+    <form data-aos="fade-up" data-aos-delay="100" class="bg-white rounded-2xl border border-charcoal/10 p-7">
+      <div class="grid gap-4">
+        <input type="text" placeholder="Name" class="w-full rounded-lg border border-charcoal/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber">
+        <input type="email" placeholder="E-Mail" class="w-full rounded-lg border border-charcoal/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber">
+        <textarea rows="4" placeholder="Beschreiben Sie kurz Ihr Projekt ..." class="w-full rounded-lg border border-charcoal/15 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber"></textarea>
+        <button type="submit" class="w-full bg-charcoal hover:bg-charcoalDark text-cream font-semibold px-6 py-3 rounded-full transition-colors">Anfrage senden</button>
+        <p class="text-xs text-charcoal/40 text-center">Demo-Formular — ohne echte Funktion.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="bg-charcoalDark py-12">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <span class="font-display font-bold text-cream text-lg">Tischlerei Schmidt</span>
+    <p class="text-cream/50 text-sm text-center">Dies ist ein fiktives Demo-Projekt von <a href="index.html" class="underline hover:text-amber transition-colors">Pixelhandwerk</a>.</p>
+    <a href="index.html" class="inline-flex items-center gap-2 text-cream/70 hover:text-amber text-sm font-medium transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Zurück zu Pixelhandwerk
+    </a>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 700, once: true, offset: 40 });
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('nav-solid', window.scrollY > 20);
+  });
+
+  const menuBtn = document.getElementById('menuBtn');
+  const closeMenuBtn = document.getElementById('closeMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  function openMenu() { mobileMenu.classList.remove('translate-x-full'); menuOverlay.classList.remove('opacity-0','pointer-events-none'); }
+  function closeMenu() { mobileMenu.classList.add('translate-x-full'); menuOverlay.classList.add('opacity-0','pointer-events-none'); }
+  menuBtn.addEventListener('click', openMenu);
+  closeMenuBtn.addEventListener('click', closeMenu);
+  menuOverlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.mobile-link').forEach(el => el.addEventListener('click', closeMenu));
+</script>
+
+</body>
+</html>

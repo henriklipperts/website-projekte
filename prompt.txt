@@ -1,0 +1,73 @@
+TÄGLICHE AUFGABE – WebDesign Henrik Kaltakquise
+
+SCHRITT 1 – BRIEFING (zuerst, vor allem anderen):
+Durchsuche meine Gmail-Inbox nach Antworten auf frühere Kaltakquise-Mails (Betreffe wie "Kostenloses Website-Beispiel..." oder "Re: ..."). Sammle:
+- Anzahl neuer Antworten seit dem letzten Lauf
+- Pro Antwort: Firmenname, kurze Einschätzung (interessiert/Absage/Rückfrage), 1 Satz Inhalt
+- Bounce-/Unzustellbar-Meldungen: betroffene Adressen als "ungültig – nicht erneut nutzen" markieren
+
+SCHRITT 2 – DUPLIKAT-BASIS AUFBAUEN:
+Durchsuche meinen "Gesendet"-Ordner in Gmail und die vorhandenen Entwürfe nach bereits kontaktierten Firmen/E-Mail-Adressen. Diese Liste ist die Basis für den Duplikat-Check in Schritt 3.
+
+SCHRITT 3 – NEUE LEADS RECHERCHIEREN (10 Stück):
+GEBIET: Ganz Deutschland, keine Einschränkung mehr auf NRW. Beliebig verteilt über Städte/Regionen suchen, keine feste Reihenfolge nötig.
+
+BRANCHEN-AUSWAHL: Komplett offen – jede lokale Branche, für die eine eigene Website sinnvoll ist (Handwerk aller Art, aber auch Gastronomie, Fitnessstudios, Arztpraxen/Physiotherapie, Einzelhandel, Friseure/Kosmetik, Fotografen, Reinigungsfirmen, Eventservices, u.v.m.). Möglichst breit streuen, nicht auf eine Branche festlegen.
+
+WEBSITE-STATUS – GLEICHWERTIG BEHANDELN: Folgende drei Fälle zählen alle gleichermaßen als "Lead qualifiziert sich":
+1. Keine Website vorhanden
+2. Website existiert, aber kaputt/nicht erreichbar (Fehlerseite, abgelaufene Domain)
+3. Website existiert, ist aber veraltet oder eine reine Platzhalter-/Standardseite (z.B. Hosting-Anbieter-Default, leere Baustellen-Seite)
+In der Cold-Mail jeweils passend auf den konkreten Fall eingehen.
+
+WICHTIGE TRENNUNG DER PRÜFUNGEN (nicht vermischen):
+A) "Trifft einer der drei Website-Status-Fälle oben zu?" → bleibt STRENG, 2 unabhängige Quellen Pflicht, kein Abkürzen. Das ist die wichtigste Prüfung gegen Fehlinformation.
+B) "Wo finde ich die E-Mail-Adresse?" → reine Recherche-Aufgabe. Hier reicht 1 verlässliche Quelle, um Tokens zu sparen.
+
+E-MAIL-SUCHE – WELCHE ADRESSEN ZÄHLEN: Jede E-Mail-Adresse, die nachweislich zum Unternehmen gehört, ist gültig – nicht nur persönliche Adressen, sondern genauso info@, kontakt@, service@, office@, anfrage@ oder jede andere Adresse, die im Impressum, auf Google Maps, in einem Branchenverzeichnis oder Social-Media-Profil als Kontaktadresse der Firma steht. Wichtig: Die Adresse muss irgendwo tatsächlich gefunden/bestätigt sein – NIEMALS eine info@firmenname.de o.ä. einfach raten oder annehmen, nur weil es plausibel klingt.
+
+E-MAIL-SUCHE – EFFIZIENTE REIHENFOLGE (spart Tokens, NUR für Schritt B): Pro Betrieb in dieser Reihenfolge suchen und bei erstem Treffer (egal welcher Adress-Typ) aus einer verlässlichen Quelle stoppen:
+1. "Firmenname Ort Impressum"
+2. Northdata / Firmenwissen
+3. Lokales Branchenbuch (Gelbe Seiten, 11880, Das Örtliche, meinestadt.de, Cylex) oder Social-Media-Profil
+Kein Zwang, mehrfach zu wiederholen oder alle Quellen durchzugehen – sobald eine verifizierte Mail gefunden ist, weiter zur nächsten Verifikation.
+
+ABBRUCHREGEL FÜRS GEBIET: Nach 5 erfolglosen Betrieben in Folge (kein passender Website-Status ODER keine auffindbare Mail) in einer Stadt/Branche sofort zu einer anderen Stadt oder Branche wechseln – bei ganz Deutschland als Gebiet ist das kein Problem mehr.
+
+ZÄHLPFLICHT – WICHTIG: Ziel sind IMMER genau 10 fertige, qualifizierte Leads mit Entwurf. Wechsle bei Bedarf frei zwischen Städten und Branchen, bis 10 erreicht sind. Gib das Ergebnis erst aus, wenn 10 Entwürfe erstellt sind.
+
+VERIFIKATION PRO BETRIEB (PFLICHT):
+1. Google Maps + Google-Suche: Trifft einer der 3 Website-Status-Fälle oben zu?
+2. ZWEITE, UNABHÄNGIGE Quelle zur Bestätigung (Gelbe Seiten, 11880, Das Örtliche, meinestadt.de, Firmenwissen, Northdata, Cylex, Social Media, Branchenverzeichnis) – Pflicht ohne Abkürzung
+3. E-Mail verifiziert – JEDE Adressart, die zum Unternehmen gehört, zählt – KEINE geratenen Adressen
+4. Inhaber-/Geschäftsführer-Nachname ermitteln. Kein Nachname auffindbar → Skip
+5. Keine E-Mail auffindbar → Skip
+6. DUPLIKAT-CHECK gegen die Liste aus Schritt 2 – bei Treffer: Skip
+7. Interne Qualitäts-Bewertung (nicht ausgeben): Nur klar qualifizierte Leads aufnehmen, keine Grenzfälle
+
+COLD-EMAIL PRO BETRIEB (individuell, kein Copy-Paste):
+- Max 60 Wörter
+- Struktur mit Absätzen (Leerzeile dazwischen):
+  Absatz 1: "Hallo Herr [Nachname],"
+  Absatz 2: Hauptteil – konkreter Website-Status (Fall 1, 2 oder 3 oben, passend formuliert) + unverbindliches, kostenloses Beispiel-Angebot
+  Absatz 3: CTA "Einfach kurz antworten" + Grußformel + "WebDesign Henrik"
+- KEINE Preisangaben
+- KEINE "Sind Sie interessiert?"-Fragen
+- Betreff angepasst an den jeweiligen Website-Status
+- Falls eine bestehende Domain erwähnt wird: nur als reinen Text nennen, NIEMALS als anklickbaren Link oder Gmail-Tracking-URL (google.com/url?q=...) einfügen
+
+SCHRITT 4 – ENTWÜRFE ERSTELLEN:
+Erstelle für jeden der 10 Betriebe direkt einen Gmail-Entwurf über die Gmail-Verbindung. Absätze/Zeilenumbrüche müssen im Entwurf erhalten bleiben.
+
+SCHRITT 5 – TAGES-BRIEFING PER MAIL:
+Erstelle eine E-Mail und sende sie über die Gmail-Verbindung an henriklipperts@gmail.com (bzw. als Entwurf, falls Senden nicht möglich):
+Betreff: "Tages-Briefing Kaltakquise [Datum]"
+Inhalt:
+- Anzahl neuer Antworten + pro Antwort: Firmenname, Einschätzung, 1 Satz Inhalt
+- Anzahl neu erstellter Entwürfe (muss 10 sein)
+- Gewählte Branche(n) und Städte/Regionen
+- Ungültige Adressen (falls vorhanden)
+
+Während der Bearbeitung sonst nichts ausgeben. Im Chat am Ende nur: "Briefing an henriklipperts@gmail.com gesendet, 10 neue Entwürfe erstellt."
+
+Kein automatisches Nachfassen bei fehlender Antwort – nur markieren, Entscheidung liegt bei mir.
