@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRIME VINTAGE — Vintage. Y2K. Your Style.</title>
+<meta name="description" content="PRIME VINTAGE — Curated vintage pieces, Y2K denim & rare sportswear. Bundles for resellers. Individual one-of-one pieces. Limited weekly drops.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   PRIME VINTAGE — DEMO WEBSITE
+   Single-file HTML/CSS/JS demo. Built for a potential client pitch.
+   Structure is prepared so demo products/cart can later be swapped for
+   real Shopify products + Shopify Cart / AJAX API without rearchitecting.
+   ========================================================================== */
+
+:root{
+  --black:#0a0a0a;
+  --near-black:#111113;
+  --charcoal:#1b1b1e;
+  --line: rgba(255,255,255,.12);
+  --white:#f6f5f1;
+  --off-white:#efeee9;
+  --pink:#ff2d92;
+  --pink-soft: rgba(255,45,146,.14);
+  --blue:#66d9ff;
+  --blue-soft: rgba(102,217,255,.14);
+  --gray-text: rgba(246,245,241,.62);
+  --gray-text-dark: rgba(10,10,10,.62);
+  --radius: 2px;
+  --ff-display: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+  --ff-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --ease: cubic-bezier(.16,.84,.44,1);
+  --header-h: 76px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  margin:0;
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--ff-body);
+  font-size:16px;
+  line-height:1.5;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; }
+ul{ margin:0; padding:0; list-style:none; }
+h1,h2,h3,h4{ margin:0; font-family:var(--ff-display); font-weight:400; letter-spacing:.01em; }
+p{ margin:0; }
+.container{
+  width:100%;
+  max-width:1360px;
+  margin:0 auto;
+  padding:0 24px;
+}
+section{ position:relative; scroll-margin-top: var(--header-h); }
+::selection{ background:var(--pink); color:var(--black); }
+
+/* scrollbar accent (progressive enhancement) */
+::-webkit-scrollbar{ width:10px; }
+::-webkit-scrollbar-track{ background:var(--black); }
+::-webkit-scrollbar-thumb{ background:#333; border:2px solid var(--black); border-radius:8px; }
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--gray-text);
+  font-weight:600;
+}
+.eyebrow::before{
+  content:'';
+  width:7px; height:7px;
+  background:var(--pink);
+  border-radius:50%;
+  flex:none;
+}
+.on-light .eyebrow{ color:var(--gray-text-dark); }
+
+.headline-xl{
+  font-family:var(--ff-display);
+  font-size: clamp(2.8rem, 8vw, 6.4rem);
+  line-height:.92;
+  text-transform:uppercase;
+  letter-spacing:.005em;
+}
+.headline-lg{
+  font-family:var(--ff-display);
+  font-size: clamp(2.1rem, 5vw, 3.6rem);
+  line-height:.98;
+  text-transform:uppercase;
+}
+.headline-md{
+  font-family:var(--ff-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height:1.05;
+  text-transform:uppercase;
+}
+.text-accent-pink{ color:var(--pink); }
+.text-accent-blue{ color:var(--blue); }
+.lede{
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color:var(--gray-text);
+  max-width:46ch;
+}
+.on-light .lede{ color:var(--gray-text-dark); }
+
+/* Buttons */
+.btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:16px 30px;
+  font-family:var(--ff-body);
+  font-weight:600;
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  transition:transform .35s var(--ease), background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+  white-space:nowrap;
+}
+.btn:active{ transform:scale(.97); }
+.btn-primary{ background:var(--white); color:var(--black); }
+.btn-primary:hover{ background:var(--pink); color:var(--black); transform:translateY(-2px); }
+.btn-outline{ background:transparent; color:var(--white); border-color:rgba(246,245,241,.35); }
+.btn-outline:hover{ border-color:var(--white); background:var(--white); color:var(--black); transform:translateY(-2px); }
+.btn-outline.on-light{ color:var(--black); border-color:rgba(10,10,10,.3); }
+.btn-outline.on-light:hover{ background:var(--black); color:var(--white); border-color:var(--black); }
+.btn-pink{ background:var(--pink); color:var(--black); }
+.btn-pink:hover{ background:var(--white); transform:translateY(-2px); }
+.btn-blue{ background:var(--blue); color:var(--black); }
+.btn-blue:hover{ background:var(--white); transform:translateY(-2px); }
+.btn-ghost-line{
+  background:none; border:none; color:inherit; padding:8px 0;
+  border-bottom:1px solid currentColor; letter-spacing:.14em; font-size:12px; font-weight:600; text-transform:uppercase;
+  display:inline-flex; align-items:center; gap:8px;
+  transition:gap .3s var(--ease), color .3s var(--ease), opacity .3s;
+}
+.btn-ghost-line:hover{ gap:14px; }
+.btn-sm{ padding:12px 20px; font-size:11px; }
+.btn-full{ width:100%; }
+.btn[disabled]{ opacity:.45; cursor:not-allowed; }
+
+/* Reveal animation */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+.reveal-delay-1{ transition-delay:.08s; }
+.reveal-delay-2{ transition-delay:.16s; }
+.reveal-delay-3{ transition-delay:.24s; }
+.reveal-delay-4{ transition-delay:.32s; }
+
+/* ============ PLACEHOLDER MEDIA ============ */
+.media{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  background:#0d0d0f;
+}
+.media img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .8s var(--ease), filter .8s var(--ease);
+}
+.media .media-mark{
+  position:absolute; right:14px; bottom:12px;
+  font-family:var(--ff-display);
+  font-size:11px; letter-spacing:.14em;
+  color:rgba(246,245,241,.55);
+  pointer-events:none;
+  mix-blend-mode:difference;
+}
+
+/* ============ SKIP LINK ============ */
+.skip-link{
+  position:absolute; left:-999px; top:0; background:var(--pink); color:var(--black);
+  padding:12px 18px; z-index:999; font-weight:700;
+}
+.skip-link:focus{ left:12px; top:12px; }
+
+/* ============ HEADER ============ */
+.site-header{
+  position:sticky; top:0; z-index:500;
+  min-height:var(--header-h);
+  display:flex; align-items:center;
+  padding:12px 0;
+  background:rgba(10,10,10,.72);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid var(--line);
+  transition:transform .45s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+}
+.site-header.header-hidden{ transform:translateY(-100%); }
+.site-header.header-scrolled{ background:rgba(8,8,9,.92); }
+.header-inner{
+  width:100%; max-width:1360px; margin:0 auto; padding:0 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+}
+.logo{
+  display:flex; flex-direction:column; line-height:.78;
+  font-family:var(--ff-display); letter-spacing:.03em;
+  font-size:26px;
+}
+.logo .logo-sub{
+  font-family:var(--ff-body); font-size:9px; letter-spacing:.32em; font-weight:600;
+  color:var(--gray-text); margin-top:5px; text-transform:uppercase;
+}
+.logo .dot{ color:var(--pink); }
+
+.main-nav{ display:flex; align-items:center; gap:38px; }
+.main-nav a{
+  font-size:13px; letter-spacing:.12em; font-weight:600; text-transform:uppercase;
+  position:relative; padding:6px 0; color:var(--white);
+}
+.main-nav a::after{
+  content:''; position:absolute; left:0; bottom:0; height:2px; width:0;
+  background:linear-gradient(90deg, var(--pink), var(--blue));
+  transition:width .35s var(--ease);
+}
+.main-nav a:hover::after, .main-nav a:focus-visible::after{ width:100%; }
+
+.header-actions{ display:flex; align-items:center; gap:8px; }
+.icon-btn{
+  width:42px; height:42px; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line); border-radius:50%; background:transparent; color:var(--white);
+  transition:border-color .3s, background .3s, transform .3s;
+  position:relative;
+}
+.icon-btn:hover{ border-color:var(--white); transform:translateY(-2px); }
+.icon-btn svg{ width:18px; height:18px; }
+.cart-count{
+  position:absolute; top:-5px; right:-5px; background:var(--pink); color:var(--black);
+  font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-family:var(--ff-body);
+  transform:scale(0); transition:transform .3s var(--ease);
+}
+.cart-count.show{ transform:scale(1); }
+.hamburger{ display:none; }
+
+/* ============ MOBILE MENU ============ */
+.mobile-menu{
+  position:fixed; inset:0; background:var(--black); z-index:600;
+  display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform .5s var(--ease);
+  padding:0;
+}
+.mobile-menu.open{ transform:translateX(0); }
+.mobile-menu-top{
+  display:flex; align-items:center; justify-content:space-between;
+  height:var(--header-h); padding:0 24px; border-bottom:1px solid var(--line);
+}
+.mobile-menu-close{
+  width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:none;color:var(--white);
+  display:flex;align-items:center;justify-content:center;
+}
+.mobile-menu nav{ flex:1; display:flex; flex-direction:column; justify-content:center; padding:24px 32px; gap:6px; }
+.mobile-menu nav a{
+  font-family:var(--ff-display); font-size:14vw; line-height:1.08; text-transform:uppercase;
+  border-bottom:1px solid var(--line); padding:12px 0; display:flex; justify-content:space-between; align-items:center;
+}
+.mobile-menu nav a span{ font-family:var(--ff-body); font-size:12px; color:var(--gray-text); }
+.mobile-menu-bottom{
+  padding:24px 32px 36px; display:flex; gap:14px; border-top:1px solid var(--line);
+}
+
+/* ============ HERO ============ */
+.hero{
+  min-height: 100svh;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding-top: var(--header-h);
+  overflow:hidden;
+}
+.hero-media{
+  position:absolute; inset:0; z-index:0;
+}
+.hero-media img{ width:100%; height:100%; object-fit:cover; }
+.hero-media::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.55) 62%, var(--black) 100%);
+}
+.hero-media::before{
+  content:''; position:absolute; inset:0; z-index:1;
+  background:
+    radial-gradient(circle at 14% 20%, var(--pink-soft), transparent 45%),
+    radial-gradient(circle at 86% 30%, var(--blue-soft), transparent 45%);
+  mix-blend-mode:screen;
+}
+.hero-content{
+  position:relative; z-index:2;
+  padding-top: 40px;
+  padding-bottom: 64px;
+}
+.hero-grid{
+  display:grid; grid-template-columns: 1.6fr .9fr; gap:40px; align-items:end;
+}
+.hero-title{ font-family:var(--ff-display); text-transform:uppercase; font-size:clamp(3.4rem, 10vw, 8.2rem); line-height:.88; }
+.hero-title .line{ display:block; overflow:hidden; }
+.hero-title .line span{ display:inline-block; transform:translateY(110%); animation:hero-line-up .9s var(--ease) forwards; }
+.hero-title .line:nth-child(1) span{ animation-delay:.05s; }
+.hero-title .line:nth-child(2) span{ animation-delay:.18s; color:var(--pink); }
+.hero-title .line:nth-child(3) span{ animation-delay:.31s; -webkit-text-stroke:2px var(--white); color:transparent; }
+@keyframes hero-line-up{ to{ transform:translateY(0); } }
+.hero-side{
+  display:flex; flex-direction:column; gap:22px; padding-bottom:8px;
+  border-left:1px solid var(--line); padding-left:24px;
+}
+.hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
+.hero-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:36px; }
+.hero-tag{
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  border:1px solid var(--line); border-radius:999px; padding:8px 16px; color:var(--gray-text);
+}
+.scroll-cue{
+  position:absolute; right:24px; bottom:26px; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--gray-text);
+  writing-mode:vertical-rl;
+}
+.scroll-cue .bar{ writing-mode:horizontal-tb; width:1px; height:46px; background:linear-gradient(var(--white), transparent); animation:cue-move 1.8s ease-in-out infinite; }
+@keyframes cue-move{ 0%,100%{ opacity:.3;} 50%{opacity:1;} }
+
+/* ============ SPLIT: WHAT ARE YOU LOOKING FOR ============ */
+.split-intro{ padding-top:88px; padding-bottom:36px; text-align:center; }
+.split-wrap{
+  display:grid; grid-template-columns:1fr 1fr; min-height:640px;
+}
+.split-panel{
+  position:relative; overflow:hidden; display:flex; align-items:flex-end;
+  min-height:560px; border-top:1px solid var(--line);
+  isolation:isolate;
+}
+.split-panel + .split-panel{ border-left:1px solid var(--line); }
+.split-panel .media{ position:absolute; inset:0; z-index:0; }
+.split-panel .media img{ width:100%; height:100%; }
+.split-panel::before{
+  content:''; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg, rgba(10,10,10,.05), rgba(10,10,10,.86) 78%);
+  transition:background .5s var(--ease);
+}
+.split-panel.pink::before{ background:linear-gradient(160deg, rgba(255,45,146,.22), rgba(10,10,10,.9) 72%); }
+.split-panel.blue::before{ background:linear-gradient(200deg, rgba(102,217,255,.2), rgba(10,10,10,.9) 72%); }
+.split-panel:hover .media img{ transform:scale(1.08) rotate(.4deg); }
+.split-panel-inner{
+  position:relative; z-index:2; width:100%; padding:44px;
+  display:flex; flex-direction:column; gap:14px;
+}
+.split-index{ font-size:12px; letter-spacing:.2em; color:var(--gray-text); font-weight:600; }
+.split-title{ font-family:var(--ff-display); font-size:clamp(3rem,7vw,5.2rem); line-height:.9; text-transform:uppercase; transition:transform .45s var(--ease); }
+.split-panel:hover .split-title{ transform:translateX(10px); }
+.split-desc{ max-width:32ch; color:var(--gray-text); font-size:15px; }
+.split-cta{
+  margin-top:10px; display:inline-flex; align-items:center; gap:12px;
+  font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
+  opacity:.55; transform:translateY(8px); transition:opacity .4s var(--ease), transform .4s var(--ease);
+}
+.split-panel:hover .split-cta{ opacity:1; transform:translateY(0); }
+.split-cta .arrow{ transition:transform .4s var(--ease); }
+.split-panel:hover .split-cta .arrow{ transform:translateX(6px); }
+.split-panel.pink .split-cta{ color:var(--pink); }
+.split-panel.blue .split-cta{ color:var(--blue); }
+.split-panel button.split-hit{
+  position:absolute; inset:0; z-index:3; background:none; border:none; padding:0; width:100%; height:100%;
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-head{
+  display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;
+  padding:96px 0 44px;
+}
+.section-head.tight{ padding-bottom:34px; }
+.section-head .htext{ max-width:640px; }
+.section-head h2{ margin-top:14px; }
+.on-light{ background:var(--off-white); color:var(--black); }
+.on-light .gray-text{ color:var(--gray-text-dark); }
+
+/* ============ BUNDLES ============ */
+.bundles-section{ background:var(--black); padding-bottom:40px; }
+.bundle-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line);
+}
+.bundle-card{
+  background:var(--near-black); display:flex; flex-direction:column;
+  transition:background .35s var(--ease);
+}
+.bundle-card:hover{ background:#161618; }
+.bundle-card .media{ aspect-ratio:4/5; }
+.bundle-card:hover .media img{ transform:scale(1.06); }
+.bundle-badge{
+  position:absolute; top:14px; left:14px; z-index:2;
+  background:var(--black); border:1px solid var(--line); color:var(--white);
+  font-size:11px; letter-spacing:.1em; font-weight:700; padding:7px 12px; border-radius:999px;
+  text-transform:uppercase;
+}
+.bundle-body{ padding:24px 22px 26px; display:flex; flex-direction:column; gap:10px; flex:1; }
+.bundle-name{ font-family:var(--ff-display); font-size:1.5rem; letter-spacing:.01em; text-transform:uppercase; }
+.bundle-desc{ font-size:13.5px; color:var(--gray-text); flex:1; }
+.bundle-meta{ display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+.bundle-price{ font-family:var(--ff-display); font-size:1.7rem; color:var(--pink); }
+.bundle-body .btn{ margin-top:14px; }
+
+/* ============ PIECES ============ */
+.pieces-section{ background:var(--off-white); color:var(--black); padding-bottom:20px; }
+.piece-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:26px;
+}
+.piece-card{ display:flex; flex-direction:column; }
+.piece-card .media{ aspect-ratio:3/4; background:#e4e2db; border:1px solid rgba(10,10,10,.08); }
+.piece-card:hover .media img{ transform:scale(1.055); }
+.piece-actions{
+  position:absolute; left:12px; right:12px; bottom:12px; z-index:3;
+  display:flex; gap:8px;
+  opacity:0; transform:translateY(10px);
+  transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+.piece-card:hover .piece-actions, .piece-card:focus-within .piece-actions{ opacity:1; transform:translateY(0); }
+.piece-actions .btn{ flex:1; padding:12px 10px; font-size:10.5px; }
+.piece-tag{
+  position:absolute; top:12px; left:12px; z-index:3;
+  font-size:10px; letter-spacing:.14em; font-weight:700; text-transform:uppercase;
+  background:var(--black); color:var(--white); padding:6px 10px;
+}
+.piece-info{ padding:16px 2px 0; display:flex; flex-direction:column; gap:4px; }
+.piece-cat{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray-text-dark); font-weight:600; }
+.piece-name{ font-family:var(--ff-display); font-size:1.35rem; text-transform:uppercase; }
+.piece-price{ font-family:var(--ff-body); font-weight:700; font-size:15px; color:var(--pink); }
+.pieces-footer{ display:flex; justify-content:center; padding:52px 0 88px; }
+
+/* ============ NEXT DROP / COUNTDOWN ============ */
+.drop-section{
+  background:var(--black); position:relative; overflow:hidden;
+  padding:110px 0; text-align:center;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.drop-section::before{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, var(--pink-soft), transparent 40%),
+    radial-gradient(circle at 80% 70%, var(--blue-soft), transparent 40%);
+}
+.drop-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:20px; }
+.drop-when{ font-family:var(--ff-display); font-size:clamp(1.4rem,3vw,2rem); letter-spacing:.05em; color:var(--gray-text); }
+.drop-when b{ color:var(--white); }
+.drop-title{ font-size:clamp(3rem,9vw,6.5rem); }
+.countdown{ display:flex; gap:14px; margin-top:26px; }
+.countdown .cd-box{
+  width:100px; background:var(--near-black); border:1px solid var(--line);
+  padding:20px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.countdown .cd-num{ font-family:var(--ff-display); font-size:2.6rem; line-height:1; font-variant-numeric:tabular-nums; }
+.countdown .cd-label{ font-size:10px; letter-spacing:.18em; color:var(--gray-text); text-transform:uppercase; }
+.drop-note{ font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-text); font-weight:600; }
+.drop-inner .btn{ margin-top:18px; }
+
+/* ============ DROP ALERT ============ */
+.alert-section{ background:var(--pink); color:var(--black); padding:64px 0; overflow:hidden; }
+.alert-inner{ display:flex; align-items:center; justify-content:space-between; gap:32px; flex-wrap:wrap; }
+.alert-text h3{ font-size:clamp(2rem,4.4vw,3rem); }
+.alert-text p{ font-weight:600; margin-top:6px; }
+.alert-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+.marquee{
+  border-top:1px solid rgba(10,10,10,.25); border-bottom:1px solid rgba(10,10,10,.25);
+  overflow:hidden; white-space:nowrap; padding:14px 0; margin-top:44px;
+}
+.marquee-track{ display:inline-flex; gap:40px; animation:marquee 22s linear infinite; }
+.marquee span{ font-family:var(--ff-display); font-size:1.4rem; text-transform:uppercase; letter-spacing:.04em; }
+@keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+/* ============ SPECIAL OFFER ============ */
+.offer-section{ background:var(--black); padding:0; }
+.offer-box{
+  position:relative; overflow:hidden; min-height:460px;
+  display:flex; align-items:center;
+  border-top:1px solid var(--line);
+}
+.offer-box .media{ position:absolute; inset:0; z-index:0; }
+.offer-box::before{
+  content:''; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(100deg, rgba(10,10,10,.95) 32%, rgba(10,10,10,.35) 68%, rgba(10,10,10,.05));
+}
+.offer-content{ position:relative; z-index:2; padding:60px 24px; max-width:1360px; margin:0 auto; width:100%; }
+.offer-tag{
+  display:inline-block; background:var(--blue); color:var(--black); font-weight:700;
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase; padding:8px 14px; margin-bottom:18px;
+}
+.offer-title{ font-size:clamp(3rem,9vw,7rem); line-height:.9; }
+.offer-price{ font-family:var(--ff-display); font-size:clamp(1.6rem,3.4vw,2.4rem); color:var(--pink); margin-top:8px; }
+.offer-sub{ margin-top:6px; color:var(--gray-text); max-width:40ch; }
+.offer-content .btn{ margin-top:26px; }
+
+/* ============ WHY / ABOUT ============ */
+.why-section{ background:var(--off-white); color:var(--black); padding-bottom:110px; }
+.why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(10,10,10,.1); border:1px solid rgba(10,10,10,.1); }
+.why-card{ background:var(--off-white); padding:38px 28px; display:flex; flex-direction:column; gap:16px; }
+.why-icon{ width:46px; height:46px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(10,10,10,.25); border-radius:50%; }
+.why-icon svg{ width:22px; height:22px; }
+.why-card h3{ font-size:1.3rem; text-transform:uppercase; }
+.why-card p{ color:var(--gray-text-dark); font-size:14px; }
+
+/* ============ HOW IT WORKS ============ */
+.how-section{ background:var(--black); padding-bottom:110px; }
+.how-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:28px; }
+.how-step{ position:relative; padding-top:26px; border-top:1px solid var(--line); }
+.how-num{ font-family:var(--ff-display); font-size:3.4rem; color:transparent; -webkit-text-stroke:1.4px var(--gray-text); line-height:1; }
+.how-step h3{ margin-top:16px; font-size:1.3rem; text-transform:uppercase; }
+.how-step p{ margin-top:10px; color:var(--gray-text); font-size:14px; max-width:26ch; }
+.how-step .how-connector{ position:absolute; top:-1px; left:0; height:2px; width:0; background:linear-gradient(90deg,var(--pink),var(--blue)); transition:width .8s var(--ease); }
+.how-step.in-view .how-connector{ width:100%; }
+
+/* ============ COMMUNITY CTA ============ */
+.community-section{
+  background:var(--near-black); text-align:center; padding:120px 0;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  position:relative; overflow:hidden;
+}
+.community-section h2{ font-size:clamp(2.6rem,7vw,5rem); max-width:16ch; margin:0 auto; }
+.community-section h2 .hl{ background:linear-gradient(90deg,var(--pink),var(--blue)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.community-section p{ max-width:56ch; margin:22px auto 32px; color:var(--gray-text); }
+.community-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+
+/* ============ SOCIAL PROOF ============ */
+.proof-section{ background:var(--black); padding:100px 0 110px; }
+.proof-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.proof-card{
+  background:var(--near-black); border:1px solid var(--line); padding:30px 26px;
+  display:flex; flex-direction:column; gap:18px;
+}
+.proof-stars{ color:var(--pink); letter-spacing:2px; font-size:15px; }
+.proof-quote{ font-size:16px; line-height:1.6; }
+.proof-name{ font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-text); font-weight:700; }
+
+/* ============ FAQ ============ */
+.faq-section{ background:var(--off-white); color:var(--black); padding-bottom:110px; }
+.faq-list{ max-width:860px; margin:0 auto; border-top:1px solid rgba(10,10,10,.14); }
+.faq-item{ border-bottom:1px solid rgba(10,10,10,.14); }
+.faq-item summary{
+  list-style:none; cursor:pointer; padding:26px 4px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  font-family:var(--ff-display); font-size:1.3rem; text-transform:uppercase;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-plus{ position:relative; width:22px; height:22px; flex:none; }
+.faq-plus::before, .faq-plus::after{ content:''; position:absolute; background:var(--black); top:50%; left:50%; transform:translate(-50%,-50%); }
+.faq-plus::before{ width:16px; height:2px; }
+.faq-plus::after{ width:2px; height:16px; transition:transform .3s var(--ease); }
+.faq-item[open] .faq-plus::after{ transform:translate(-50%,-50%) rotate(90deg) scale(0); }
+.faq-answer{ padding:0 4px 28px; max-width:70ch; color:var(--gray-text-dark); font-size:15px; }
+
+/* ============ FOOTER ============ */
+.site-footer{ background:var(--black); padding-top:90px; border-top:1px solid var(--line); }
+.footer-top{ display:grid; grid-template-columns:1.4fr repeat(4,1fr); gap:32px; padding-bottom:70px; }
+.footer-brand .logo{ font-size:34px; margin-bottom:16px; }
+.footer-brand p{ color:var(--gray-text); max-width:32ch; font-size:14px; }
+.footer-socials{ display:flex; gap:10px; margin-top:22px; }
+.footer-col h4{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); margin-bottom:18px; font-family:var(--ff-body); font-weight:700; }
+.footer-col ul{ display:flex; flex-direction:column; gap:12px; }
+.footer-col a{ font-size:14px; color:var(--white); opacity:.85; transition:opacity .25s; }
+.footer-col a:hover{ opacity:1; color:var(--pink); }
+.footer-bottom{
+  border-top:1px solid var(--line); padding:26px 0 34px;
+  display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+  font-size:12px; color:var(--gray-text);
+}
+.footer-bottom .legal{ display:flex; gap:20px; }
+
+/* ============ CART PANEL ============ */
+.overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(2px);
+  z-index:700; opacity:0; pointer-events:none; transition:opacity .4s var(--ease);
+}
+.overlay.show{ opacity:1; pointer-events:auto; }
+.cart-panel{
+  position:fixed; top:0; right:0; bottom:0; width:min(420px,92vw); background:var(--near-black);
+  z-index:800; display:flex; flex-direction:column; transform:translateX(100%);
+  transition:transform .5s var(--ease); border-left:1px solid var(--line);
+}
+.cart-panel.open{ transform:translateX(0); }
+.cart-head{ display:flex; align-items:center; justify-content:space-between; padding:22px 24px; border-bottom:1px solid var(--line); }
+.cart-head h3{ font-size:1.4rem; text-transform:uppercase; }
+.cart-items{ flex:1; overflow-y:auto; padding:10px 24px; }
+.cart-empty{ padding:60px 0; text-align:center; color:var(--gray-text); }
+.cart-empty svg{ width:38px; height:38px; margin:0 auto 14px; opacity:.5; }
+.cart-line{ display:flex; gap:14px; padding:18px 0; border-bottom:1px solid var(--line); }
+.cart-line .media{ width:74px; height:88px; flex:none; }
+.cart-line-body{ flex:1; display:flex; flex-direction:column; gap:6px; }
+.cart-line-top{ display:flex; justify-content:space-between; gap:10px; }
+.cart-line-title{ font-family:var(--ff-display); font-size:1.05rem; text-transform:uppercase; line-height:1.05; }
+.cart-line-cat{ font-size:11px; color:var(--gray-text); text-transform:uppercase; letter-spacing:.08em; }
+.cart-line-bottom{ display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
+.qty-stepper{ display:flex; align-items:center; border:1px solid var(--line); }
+.qty-stepper button{ background:none; border:none; color:var(--white); width:26px; height:26px; font-size:15px; }
+.qty-stepper span{ min-width:22px; text-align:center; font-size:13px; }
+.cart-remove{ background:none; border:none; color:var(--gray-text); font-size:11px; letter-spacing:.08em; text-transform:uppercase; text-decoration:underline; }
+.cart-line-price{ font-weight:700; color:var(--pink); }
+.cart-foot{ padding:22px 24px 28px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:14px; }
+.cart-subtotal{ display:flex; justify-content:space-between; font-family:var(--ff-display); font-size:1.3rem; text-transform:uppercase; }
+.cart-note{ font-size:11.5px; color:var(--gray-text); text-align:center; }
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed; left:50%; bottom:28px; transform:translate(-50%,140%);
+  background:var(--white); color:var(--black); padding:14px 22px; border-radius:999px;
+  display:flex; align-items:center; gap:12px; font-size:13px; font-weight:600;
+  z-index:900; transition:transform .5s var(--ease); box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+.toast.show{ transform:translate(-50%,0); }
+.toast .dot{ width:8px;height:8px;border-radius:50%; background:var(--pink); flex:none; }
+
+/* ============ QUICK VIEW MODAL ============ */
+.qv-modal{
+  position:fixed; inset:0; z-index:850; display:flex; align-items:center; justify-content:center;
+  padding:20px; opacity:0; pointer-events:none; transition:opacity .4s var(--ease);
+}
+.qv-modal.open{ opacity:1; pointer-events:auto; }
+.qv-modal .overlay{ position:absolute; inset:0; }
+.qv-box{
+  position:relative; z-index:2; background:var(--near-black); border:1px solid var(--line);
+  max-width:920px; width:100%; max-height:88vh; overflow:auto;
+  display:grid; grid-template-columns:1fr 1fr;
+  transform:translateY(24px) scale(.98); transition:transform .45s var(--ease);
+}
+.qv-modal.open .qv-box{ transform:translateY(0) scale(1); }
+.qv-box .media{ min-height:340px; }
+.qv-body{ padding:38px; display:flex; flex-direction:column; gap:14px; }
+.qv-close{
+  position:absolute; top:16px; right:16px; z-index:3; width:38px; height:38px; border-radius:50%;
+  background:var(--black); border:1px solid var(--line); color:var(--white); display:flex; align-items:center; justify-content:center;
+}
+.qv-cat{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); font-weight:700; }
+.qv-title{ font-size:2rem; }
+.qv-price{ font-family:var(--ff-display); font-size:1.7rem; color:var(--pink); }
+.qv-desc{ color:var(--gray-text); font-size:14.5px; }
+.qv-actions{ display:flex; gap:12px; margin-top:10px; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1080px){
+  .bundle-grid{ grid-template-columns:repeat(2,1fr); }
+  .piece-grid{ grid-template-columns:repeat(2,1fr); }
+  .why-grid{ grid-template-columns:repeat(2,1fr); }
+  .how-grid{ grid-template-columns:repeat(2,1fr); row-gap:44px; }
+  .footer-top{ grid-template-columns:1fr 1fr; row-gap:44px; }
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-side{ border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px; }
+}
+@media (max-width:860px){
+  .main-nav, .header-actions .icon-btn.hide-mobile{ display:none; }
+  .hamburger{
+    display:flex; width:42px; height:42px; border:1px solid var(--line); border-radius:50%;
+    align-items:center; justify-content:center; background:none; color:var(--white);
+  }
+  .logo{ font-size:21px; flex-direction:row; align-items:baseline; gap:2px; white-space:nowrap; }
+  .logo .logo-sub{ display:none; }
+  .split-wrap{ grid-template-columns:1fr; }
+  .split-panel + .split-panel{ border-left:none; border-top:1px solid var(--line); }
+  .split-panel{ min-height:420px; }
+  .qv-box{ grid-template-columns:1fr; }
+  .qv-box .media{ min-height:240px; }
+  .alert-inner{ flex-direction:column; align-items:flex-start; }
+}
+@media (max-width:680px){
+  .container{ padding:0 18px; }
+  .bundle-grid, .piece-grid, .why-grid{ grid-template-columns:repeat(2,1fr); }
+  .how-grid{ grid-template-columns:1fr; }
+  .footer-top{ grid-template-columns:1fr 1fr; }
+  .footer-brand{ grid-column:1 / -1; }
+  .proof-grid{ grid-template-columns:1fr; }
+  .countdown{ gap:8px; }
+  .countdown .cd-box{ width:76px; padding:14px 4px; }
+  .countdown .cd-num{ font-size:1.9rem; }
+  .offer-box{ min-height:420px; }
+  .bundle-body{ padding:18px 16px 20px; }
+  .section-head{ padding:64px 0 28px; }
+  .cart-panel{ width:100%; }
+}
+@media (max-width:420px){
+  .bundle-grid, .piece-grid, .why-grid{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- =========================================================
+     HEADER
+========================================================== -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#home" class="logo" aria-label="Prime Vintage — Home">
+      PRIME<span class="dot">·</span>VINTAGE
+      <span class="logo-sub">Supplier · Est. Reseller Goods</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#drops">Drops</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="icon-btn hide-mobile" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a class="icon-btn hide-mobile" href="https://wa.me/491234567890" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.4-4.1A8 8 0 1 1 9 18.6L4 20Z"/><path d="M8.5 9.3c.1-.6.7-.6 1-.6.3 0 .5 0 .6.3.2.4.5 1.2.5 1.3.1.1.1.3 0 .4-.1.2-.2.3-.3.4-.1.1-.3.3-.4.4-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2 1.2.9 2.1 1.2 2.4 1.3.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.7.8.2.1.4.2.4.3.1.4.1.9-.1 1.3-.3.5-1.4 1-2 1-.5.1-1.1.1-3.4-.9-2.8-1.2-4.6-4-4.8-4.2-.1-.2-1-1.3-1-2.5 0-1.2.6-1.8.8-2Z" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <button class="icon-btn" id="cartToggle" aria-label="Open cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h2l1.6 10.6A2 2 0 0 0 8.6 18.4h8.8a2 2 0 0 0 2-1.7L20.5 8H6"/><circle cx="9" cy="21" r="1.2"/><circle cx="17" cy="21" r="1.2"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="hamburger" id="menuToggle" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-top">
+    <span class="logo">PRIME<span class="dot">·</span>VINTAGE</span>
+    <button class="mobile-menu-close" id="menuClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#home" class="mobile-link"><span>01</span>Home</a>
+    <a href="#shop" class="mobile-link"><span>02</span>Shop</a>
+    <a href="#drops" class="mobile-link"><span>03</span>Drops</a>
+    <a href="#about" class="mobile-link"><span>04</span>About</a>
+    <a href="#faq" class="mobile-link"><span>05</span>FAQ</a>
+  </nav>
+  <div class="mobile-menu-bottom">
+    <a class="icon-btn" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+    <a class="icon-btn" href="https://wa.me/491234567890" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.4-4.1A8 8 0 1 1 9 18.6L4 20Z"/></svg></a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- =========================================================
+       HERO
+  ========================================================== -->
+  <section class="hero" id="home">
+    <div class="hero-media">
+      <!-- REPLACE: real hero campaign photo -> images/hero/hero-main.jpg -->
+      <img data-ph="hero" data-ph-title="PRIME VINTAGE HERO" data-ph-variant="mixed" alt="Prime Vintage — curated Y2K and vintage streetwear">
+    </div>
+    <div class="container hero-content">
+      <div class="hero-grid">
+        <h1 class="hero-title">
+          <span class="line"><span>VINTAGE.</span></span>
+          <span class="line"><span>Y2K.</span></span>
+          <span class="line"><span>YOUR STYLE.</span></span>
+        </h1>
+        <div class="hero-side reveal">
+          <p class="lede">Curated vintage pieces, Y2K denim &amp; rare sportswear — sourced, sorted and shipped for resellers and collectors who don't want the same five hoodies as everyone else.</p>
+          <div class="hero-actions">
+            <a href="#shop" class="btn btn-primary">Shop the Drop</a>
+            <a href="#pieces" class="btn btn-outline">Explore Collection</a>
+          </div>
+          <div class="hero-tags">
+            <span class="hero-tag">No Minimum Order</span>
+            <span class="hero-tag">Weekly Drops</span>
+            <span class="hero-tag">1‑of‑1 Pieces</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span>Scroll</span><span class="bar"></span></div>
+  </section>
+
+  <!-- =========================================================
+       WHAT ARE YOU LOOKING FOR — BUNDLES / PIECES
+  ========================================================== -->
+  <section id="shop">
+    <div class="container split-intro reveal">
+      <span class="eyebrow">Start Here</span>
+      <h2 class="headline-lg" style="margin-top:14px;">What Are You Looking For?</h2>
+    </div>
+    <div class="split-wrap">
+      <div class="split-panel pink" id="panelBundles">
+        <div class="media">
+          <!-- REPLACE: images/categories/bundles.jpg -->
+          <img data-ph="cat-bundles" data-ph-title="BUNDLES" data-ph-variant="pink" alt="Curated bundles for resellers">
+        </div>
+        <button class="split-hit" data-scroll-to="#bundles" aria-label="Go to Bundles"></button>
+        <div class="split-panel-inner">
+          <span class="split-index">01 / For Resellers</span>
+          <h3 class="split-title">Bundles</h3>
+          <p class="split-desc">Curated bundles for resellers. Sorted by category, ready to flip.</p>
+          <span class="split-cta">View Bundles <span class="arrow">→</span></span>
+        </div>
+      </div>
+      <div class="split-panel blue" id="panelPieces">
+        <div class="media">
+          <!-- REPLACE: images/categories/pieces.jpg -->
+          <img data-ph="cat-pieces" data-ph-title="PIECES" data-ph-variant="blue" alt="Individual vintage and Y2K pieces">
+        </div>
+        <button class="split-hit" data-scroll-to="#pieces" aria-label="Go to Pieces"></button>
+        <div class="split-panel-inner">
+          <span class="split-index">02 / For You</span>
+          <h3 class="split-title">Pieces</h3>
+          <p class="split-desc">Individual vintage &amp; Y2K pieces. One of one. No restock.</p>
+          <span class="split-cta">View Pieces <span class="arrow">→</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       BUNDLES
+  ========================================================== -->
+  <section class="bundles-section" id="bundles">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="htext">
+          <span class="eyebrow">For Resellers</span>
+          <h2 class="headline-lg">Bundles</h2>
+        </div>
+        <p class="lede">Curated for resellers. Hand-sorted mixes of vintage &amp; Y2K pieces, bundled for volume — grab a category and start flipping.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="bundle-grid" id="bundleGrid"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       PIECES
+  ========================================================== -->
+  <section class="pieces-section" id="pieces">
+    <div class="container">
+      <div class="section-head tight reveal">
+        <div class="htext">
+          <span class="eyebrow">Latest Pieces</span>
+          <h2 class="headline-lg">Latest Pieces</h2>
+        </div>
+        <p class="lede">One of one. No restock. Once a piece is gone, it's gone for good — that's the drop.</p>
+      </div>
+      <div class="piece-grid" id="pieceGrid"></div>
+      <div class="pieces-footer reveal">
+        <a href="#drops" class="btn btn-outline on-light">See Next Drop</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       NEXT DROP / COUNTDOWN
+  ========================================================== -->
+  <section class="drop-section" id="drops">
+    <div class="container drop-inner reveal">
+      <span class="eyebrow">Next Drop</span>
+      <h2 class="drop-title headline-xl">Next Drop</h2>
+      <p class="drop-when">Every Sunday · <b id="dropTimeLabel">16:30</b></p>
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="cd-box"><span class="cd-num" id="cdDays">00</span><span class="cd-label">Days</span></div>
+        <div class="cd-box"><span class="cd-num" id="cdHours">00</span><span class="cd-label">Hours</span></div>
+        <div class="cd-box"><span class="cd-num" id="cdMinutes">00</span><span class="cd-label">Minutes</span></div>
+        <div class="cd-box"><span class="cd-num" id="cdSeconds">00</span><span class="cd-label">Seconds</span></div>
+      </div>
+      <p class="drop-note">Limited Pieces. No Restock.</p>
+      <a href="#pieces" class="btn btn-pink">View Drop</a>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       DROP ALERT
+  ========================================================== -->
+  <section class="alert-section">
+    <div class="container alert-inner reveal">
+      <div class="alert-text">
+        <h3 class="headline-md">Drop Alert</h3>
+        <p>New pieces. Limited quantities. Be first or miss out.</p>
+      </div>
+      <div class="alert-actions">
+        <a href="https://wa.me/491234567890" target="_blank" rel="noopener" class="btn" style="background:var(--black); color:var(--white);">Join WhatsApp</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn-outline on-light">Follow Instagram</a>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Limited Pieces</span><span>·</span><span>No Restock</span><span>·</span><span>New Drop Every Sunday</span><span>·</span>
+        <span>Limited Pieces</span><span>·</span><span>No Restock</span><span>·</span><span>New Drop Every Sunday</span><span>·</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SPECIAL OFFER
+  ========================================================== -->
+  <section class="offer-section">
+    <div class="offer-box reveal">
+      <div class="media">
+        <!-- REPLACE: images/promo/y2k-jeans-promo.jpg -->
+        <img data-ph="offer" data-ph-title="Y2K JEANS" data-ph-variant="pink" alt="Y2K jeans limited drop">
+      </div>
+      <div class="offer-content">
+        <span class="offer-tag">Limited Drop</span>
+        <h2 class="offer-title">Y2K Jeans</h2>
+        <p class="offer-price">From 6,50 €</p>
+        <p class="offer-sub">Special prices. Limited quantities. Restocked pieces sourced straight from the source — while stock lasts.</p>
+        <a href="#pieces" class="btn btn-blue">Shop Y2K</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       WHY PRIME VINTAGE
+  ========================================================== -->
+  <section class="why-section" id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="htext">
+          <span class="eyebrow">About Us</span>
+          <h2 class="headline-lg">Why Prime Vintage</h2>
+        </div>
+      </div>
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 8l7-5 7 5M5 8v9l7 5 7-5V8"/></svg></div>
+          <h3>No Minimum Order</h3>
+          <p>Order from just 1 piece.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-1">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.6-9.5-9C.5 8 2 4 6 4c2.2 0 3.6 1.3 6 3.6C14.4 5.3 15.8 4 18 4c4 0 5.5 4 3.5 8-2.5 4.4-9.5 9-9.5 9Z"/></svg></div>
+          <h3>Handpicked Pieces</h3>
+          <p>Curated vintage &amp; Y2K pieces.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-2">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18M3 12h18"/></svg></div>
+          <h3>Many Brands</h3>
+          <p>From Y2K to sportswear.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-3">
+          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="14" height="11" rx="1"/><path d="M16 10h3l3 3v5h-6"/><circle cx="7" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></svg></div>
+          <h3>Fast Shipping</h3>
+          <p>Every order carefully packed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       HOW IT WORKS
+  ========================================================== -->
+  <section class="how-section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="htext">
+          <span class="eyebrow">The Process</span>
+          <h2 class="headline-lg">How It Works</h2>
+        </div>
+      </div>
+      <div class="how-grid">
+        <div class="how-step reveal"><div class="how-connector"></div><span class="how-num">01</span><h3>Choose Your Category</h3><p>Bundles or individual pieces.</p></div>
+        <div class="how-step reveal reveal-delay-1"><div class="how-connector"></div><span class="how-num">02</span><h3>Find Your Pieces</h3><p>Explore the latest drop.</p></div>
+        <div class="how-step reveal reveal-delay-2"><div class="how-connector"></div><span class="how-num">03</span><h3>Place Your Order</h3><p>Simple and fast.</p></div>
+        <div class="how-step reveal reveal-delay-3"><div class="how-connector"></div><span class="how-num">04</span><h3>Get Your Package</h3><p>Packed and shipped quickly.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       COMMUNITY CTA
+  ========================================================== -->
+  <section class="community-section">
+    <div class="container reveal">
+      <h2>Don't Miss The <span class="hl">Next Drop.</span></h2>
+      <p>Join the Prime Vintage community and get notified about new drops, exclusive pieces and special deals.</p>
+      <div class="community-actions">
+        <a href="https://wa.me/491234567890" target="_blank" rel="noopener" class="btn btn-pink">Join WhatsApp</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn-outline">Follow Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       SOCIAL PROOF
+       DEMO CONTENT — replace with real customer reviews before launch.
+  ========================================================== -->
+  <section class="proof-section">
+    <div class="container">
+      <div class="section-head tight reveal">
+        <div class="htext">
+          <span class="eyebrow">Demo Content · Replace Before Launch</span>
+          <h2 class="headline-lg">What People Say</h2>
+        </div>
+      </div>
+      <div class="proof-grid" id="proofGrid"><!-- rendered via JS, data marked demo:true --></div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FAQ
+  ========================================================== -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="htext">
+          <span class="eyebrow">Questions</span>
+          <h2 class="headline-lg">FAQ</h2>
+        </div>
+      </div>
+      <div class="faq-list reveal">
+        <details class="faq-item" open>
+          <summary>What are bundles?<span class="faq-plus"></span></summary>
+          <div class="faq-answer">Bundles are curated sets of vintage &amp; Y2K pieces, sorted by category (denim, sportswear, mixed) and priced for resellers who want to buy in volume at a lower per-piece cost. Demo answer — final copy to be provided by client.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I order individual pieces?<span class="faq-plus"></span></summary>
+          <div class="faq-answer">Yes — every single piece in our Pieces section can be ordered individually, with no minimum order quantity. Demo answer — final copy to be provided by client.</div>
+        </details>
+        <details class="faq-item">
+          <summary>When are new drops?<span class="faq-plus"></span></summary>
+          <div class="faq-answer">New drops go live every Sunday at 16:30. Quantities are limited and pieces are not restocked once sold out. Demo answer — final copy to be provided by client.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do you ship?<span class="faq-plus"></span></summary>
+          <div class="faq-answer">Yes, we ship nationwide with fast, carefully packed shipping. International shipping details to be confirmed. Demo answer — final copy to be provided by client.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Is there a minimum order?<span class="faq-plus"></span></summary>
+          <div class="faq-answer">No — you can order from just one single piece, no minimum order quantity required. Demo answer — final copy to be provided by client.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo">PRIME<span class="dot">·</span>VINTAGE</span>
+        <p>Vintage. Y2K. Your Style.</p>
+        <div class="footer-socials">
+          <a class="icon-btn" href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+          <a class="icon-btn" href="https://wa.me/491234567890" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l1.4-4.1A8 8 0 1 1 9 18.6L4 20Z"/></svg></a>
+          <a class="icon-btn" href="https://tiktok.com/" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.5 2.7 2.3 4.4 5 4.7"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul><li><a href="#bundles">Bundles</a></li><li><a href="#pieces">Pieces</a></li><li><a href="#drops">Next Drop</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul><li><a href="#about">About</a></li><li><a href="#faq">FAQ</a></li><li><a href="#drops">Drops</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul><li><a href="https://wa.me/491234567890" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a></li><li><a href="mailto:hello@primevintage.demo">Email</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Prime Vintage — Demo build for pitch purposes.</span>
+      <span class="legal"><a href="#">Impressum</a><a href="#">Datenschutz</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     CART PANEL
+========================================================== -->
+<div class="overlay" id="cartOverlay"></div>
+<aside class="cart-panel" id="cartPanel" aria-label="Shopping cart">
+  <div class="cart-head">
+    <h3>Your Cart</h3>
+    <button class="icon-btn" id="cartClose" aria-label="Close cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">0,00 €</span></div>
+    <button class="btn btn-primary btn-full" id="cartCheckout" disabled>Checkout — Coming Soon</button>
+    <p class="cart-note">Demo cart. Will be connected to Shopify Checkout at launch.</p>
+  </div>
+</aside>
+
+<!-- =========================================================
+     QUICK VIEW MODAL
+========================================================== -->
+<div class="qv-modal" id="qvModal">
+  <div class="overlay" id="qvOverlay"></div>
+  <div class="qv-box">
+    <button class="qv-close" id="qvClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="media" id="qvMedia"><img alt=""></div>
+    <div class="qv-body">
+      <span class="qv-cat" id="qvCat"></span>
+      <h3 class="qv-title" id="qvTitle"></h3>
+      <p class="qv-price" id="qvPrice"></p>
+      <p class="qv-desc" id="qvDesc"></p>
+      <div class="qv-actions">
+        <button class="btn btn-primary" id="qvAddToCart">Add To Cart</button>
+        <button class="btn btn-outline" id="qvCloseBtn">Continue Browsing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText">Added to cart</span></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* =========================================================
+     PRODUCT DATA
+     Structured so real Shopify products can later replace this
+     array 1:1 (id, title, category, type, price, image, description).
+     type: 'bundle' | 'piece'
+  ========================================================== */
+  var PRODUCTS = [
+    // ---- BUNDLES ----
+    {
+      id:'bundle-y2k-jeans',
+      title:'Y2K Jeans Bundle',
+      category:'Jeans',
+      type:'bundle',
+      count:10,
+      price:89.90,
+      image:'images/bundles/y2k-jeans-bundle.jpg',
+      phVariant:'pink',
+      description:'10 hand-picked Y2K jeans — low-rise, baggy &amp; flared cuts from the era. Perfect starter bundle for resellers targeting the Y2K denim wave.'
+    },
+    {
+      id:'bundle-vintage-sportswear',
+      title:'Vintage Sportswear Bundle',
+      category:'Sportswear',
+      type:'bundle',
+      count:10,
+      price:99.90,
+      image:'images/bundles/vintage-sportswear-bundle.jpg',
+      phVariant:'blue',
+      description:'10 pieces of vintage sportswear — jackets, jerseys &amp; polos from iconic sport brands. Reseller-ready and sorted by condition.'
+    },
+    {
+      id:'bundle-mixed-vintage',
+      title:'Mixed Vintage Bundle',
+      category:'Mixed',
+      type:'bundle',
+      count:20,
+      price:149.90,
+      image:'images/bundles/mixed-vintage-bundle.jpg',
+      phVariant:'pink',
+      description:'20 mixed vintage pieces spanning denim, outerwear &amp; tops. Our best value bundle for building out a full resale rack.'
+    },
+    {
+      id:'bundle-y2k-starter',
+      title:'Y2K Starter Bundle',
+      category:'Starter',
+      type:'bundle',
+      count:5,
+      price:49.90,
+      image:'images/bundles/y2k-starter-bundle.jpg',
+      phVariant:'blue',
+      description:'A small 5-piece Y2K bundle — the entry point if you\'re testing the reseller waters before going bigger.'
+    },
+    // ---- PIECES ----
+    {
+      id:'piece-y2k-baggy-jeans',
+      title:'Y2K Baggy Jeans',
+      category:'Denim',
+      type:'piece',
+      price:12.90,
+      image:'images/pieces/y2k-baggy-jeans.jpg',
+      phVariant:'blue',
+      description:'One-of-one Y2K baggy jeans in washed denim. Authentic era cut, checked for quality before listing. No restock once sold.'
+    },
+    {
+      id:'piece-vintage-sports-jacket',
+      title:'Vintage Sports Jacket',
+      category:'Outerwear',
+      type:'piece',
+      price:24.90,
+      image:'images/pieces/vintage-sports-jacket.jpg',
+      phVariant:'blue',
+      description:'Vintage sports jacket with bold retro colour-blocking. A true one-of-one — once it\'s gone, it\'s gone.'
+    },
+    {
+      id:'piece-vintage-racing-jacket',
+      title:'Vintage Racing Jacket',
+      category:'Outerwear',
+      type:'piece',
+      price:34.90,
+      image:'images/pieces/vintage-racing-jacket.jpg',
+      phVariant:'pink',
+      description:'Motorsport-inspired vintage racing jacket with embroidered patches. Rare find, priced for a fast sell-through.'
+    },
+    {
+      id:'piece-y2k-denim',
+      title:'Y2K Denim',
+      category:'Denim',
+      type:'piece',
+      price:10.90,
+      image:'images/pieces/y2k-denim.jpg',
+      phVariant:'blue',
+      description:'Classic Y2K denim piece — versatile, wearable and priced to move quickly in your store.'
+    },
+    {
+      id:'piece-vintage-polo',
+      title:'Vintage Polo',
+      category:'Tops',
+      type:'piece',
+      price:14.90,
+      image:'images/pieces/vintage-polo.jpg',
+      phVariant:'pink',
+      description:'Soft vintage polo shirt in great condition. A staple piece that fits almost any Y2K or vintage rotation.'
+    },
+    {
+      id:'piece-vintage-adidas-jacket',
+      title:'Vintage Adidas Jacket',
+      category:'Outerwear',
+      type:'piece',
+      price:24.90,
+      image:'images/pieces/vintage-adidas-jacket.jpg',
+      phVariant:'blue',
+      description:'Classic three-stripe vintage Adidas track jacket. Instantly recognisable, always in demand.'
+    },
+    {
+      id:'piece-y2k-cargo-pants',
+      title:'Y2K Cargo Pants',
+      category:'Denim',
+      type:'piece',
+      price:16.90,
+      image:'images/pieces/y2k-cargo-pants.jpg',
+      phVariant:'pink',
+      description:'Utility-style Y2K cargo pants with multiple pockets. High demand, low supply — grab it while it lasts.'
+    },
+    {
+      id:'piece-vintage-windbreaker',
+      title:'Vintage Windbreaker',
+      category:'Outerwear',
+      type:'piece',
+      price:19.90,
+      image:'images/pieces/vintage-windbreaker.jpg',
+      phVariant:'pink',
+      description:'Lightweight vintage windbreaker with bold retro print. A one-of-one piece, ready to ship.'
+    }
+  ];
+
+  var fmt = function(n){ return n.toFixed(2).replace('.', ',') + ' €'; };
+
+  /* =========================================================
+     PLACEHOLDER IMAGE GENERATOR
+     Produces a deterministic, art-directed duotone SVG data-URI
+     per product so the demo never shows broken/empty images.
+     Swap real photography by setting the product's `image` path —
+     onerror below falls back to this generator automatically.
+  ========================================================== */
+  function hashSeed(str){
+    var h = 0;
+    for (var i=0;i<str.length;i++){ h = (h<<5)-h + str.charCodeAt(i); h |= 0; }
+    return Math.abs(h);
+  }
+  function placeholderSVG(seedStr, variant, label){
+    var seed = hashSeed(seedStr || 'prime-vintage');
+    var rand = function(n){ seed = (seed * 9301 + 49297) % 233280; return (seed / 233280) * n; };
+    var palette = {
+      pink: ['#ff2d92', '#120a10'],
+      blue: ['#66d9ff', '#0a1013'],
+      mixed:['#ff2d92', '#66d9ff']
+    }[variant] || ['#ff2d92', '#0a0a0a'];
+    var x1 = rand(100), y1 = rand(100), x2 = 30+rand(70), y2 = 30+rand(70);
+    var rot = -18 + rand(36);
+    var svg = '' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1125" viewBox="0 0 900 1125">' +
+        '<defs>' +
+          '<radialGradient id="g1" cx="'+x1+'%" cy="'+y1+'%" r="75%">' +
+            '<stop offset="0%" stop-color="'+palette[0]+'" stop-opacity="0.55"/>' +
+            '<stop offset="100%" stop-color="'+palette[0]+'" stop-opacity="0"/>' +
+          '</radialGradient>' +
+          '<radialGradient id="g2" cx="'+x2+'%" cy="'+y2+'%" r="70%">' +
+            '<stop offset="0%" stop-color="'+palette[1]+'" stop-opacity="0.85"/>' +
+            '<stop offset="100%" stop-color="#0a0a0a" stop-opacity="1"/>' +
+          '</radialGradient>' +
+          '<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>' +
+        '</defs>' +
+        '<rect width="900" height="1125" fill="#0a0a0a"/>' +
+        '<rect width="900" height="1125" fill="url(#g2)"/>' +
+        '<rect width="900" height="1125" fill="url(#g1)" style="mix-blend-mode:screen"/>' +
+        '<rect width="900" height="1125" filter="url(#grain)" opacity="0.05"/>' +
+        '<text x="450" y="600" text-anchor="middle" transform="rotate('+rot+' 450 600)" font-family="Arial Black, sans-serif" font-weight="900" font-size="220" fill="#f6f5f1" opacity="0.06">PV</text>' +
+        '<text x="40" y="1080" font-family="Arial, sans-serif" font-weight="700" letter-spacing="2" font-size="20" fill="#f6f5f1" opacity="0.5">' + (label||'') + '</text>' +
+      '</svg>';
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+  function applyPlaceholder(img){
+    var variant = img.getAttribute('data-ph-variant') || 'pink';
+    var title = img.getAttribute('data-ph-title') || img.alt || 'PRIME VINTAGE';
+    img.src = placeholderSVG(title, variant, title);
+  }
+  // wire up any static <img data-ph> placeholders + real-image fallback
+  document.querySelectorAll('img[data-ph]').forEach(function(img){
+    applyPlaceholder(img);
+  });
+  window.PV_resolveImage = function(imgEl, realSrc, seed, variant, label){
+    imgEl.alt = label || '';
+    imgEl.onerror = function(){ imgEl.onerror = null; imgEl.src = placeholderSVG(seed, variant, label); };
+    imgEl.src = realSrc; // if real Shopify/product images exist later, this loads them directly
+  };
+
+  /* =========================================================
+     RENDER: BUNDLES + PIECES
+  ========================================================== */
+  var bundleGrid = document.getElementById('bundleGrid');
+  var pieceGrid = document.getElementById('pieceGrid');
+
+  PRODUCTS.filter(function(p){ return p.type === 'bundle'; }).forEach(function(p, i){
+    var card = document.createElement('article');
+    card.className = 'bundle-card reveal reveal-delay-' + ((i % 4) + 1);
+    card.innerHTML =
+      '<div class="media">' +
+        '<span class="bundle-badge">' + p.count + ' PIECES</span>' +
+        '<img alt="">' +
+      '</div>' +
+      '<div class="bundle-body">' +
+        '<h3 class="bundle-name">' + p.title + '</h3>' +
+        '<p class="bundle-desc">' + p.description + '</p>' +
+        '<div class="bundle-meta"><span class="bundle-price">' + fmt(p.price) + '</span></div>' +
+        '<button class="btn btn-outline btn-full" data-qv="' + p.id + '">View Bundle</button>' +
+      '</div>';
+    bundleGrid.appendChild(card);
+    window.PV_resolveImage(card.querySelector('img'), p.image, p.title, p.phVariant, p.title);
+  });
+
+  PRODUCTS.filter(function(p){ return p.type === 'piece'; }).forEach(function(p, i){
+    var card = document.createElement('article');
+    card.className = 'piece-card reveal reveal-delay-' + ((i % 4) + 1);
+    card.innerHTML =
+      '<div class="media">' +
+        '<span class="piece-tag">' + p.category + '</span>' +
+        '<img alt="">' +
+        '<div class="piece-actions">' +
+          '<button class="btn btn-primary" data-add="' + p.id + '">Add To Cart</button>' +
+          '<button class="btn btn-outline on-light" data-qv="' + p.id + '">View Piece</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="piece-info">' +
+        '<span class="piece-cat">' + p.category + '</span>' +
+        '<h3 class="piece-name">' + p.title + '</h3>' +
+        '<span class="piece-price">' + fmt(p.price) + '</span>' +
+      '</div>';
+    pieceGrid.appendChild(card);
+    window.PV_resolveImage(card.querySelector('img'), p.image, p.title, p.phVariant, p.title);
+  });
+
+  /* =========================================================
+     SOCIAL PROOF — clearly marked DEMO CONTENT
+  ========================================================== */
+  var TESTIMONIALS = [
+    { demo:true, quote:'Die Y2K Jeans sind insane 🔥', name:'@resell.jayy' },
+    { demo:true, quote:'Schon mehrfach bestellt – jedes Mal starke Pieces.', name:'@vintage.mia' },
+    { demo:true, quote:'Schneller Versand und gute Auswahl.', name:'@thriftbyleon' }
+  ];
+  var proofGrid = document.getElementById('proofGrid');
+  TESTIMONIALS.forEach(function(t, i){
+    var el = document.createElement('div');
+    el.className = 'proof-card reveal reveal-delay-' + (i+1);
+    el.setAttribute('data-demo-content', 'true');
+    el.innerHTML =
+      '<span class="proof-stars">★★★★★</span>' +
+      '<p class="proof-quote">"' + t.quote + '"</p>' +
+      '<span class="proof-name">' + t.name + '</span>';
+    proofGrid.appendChild(el);
+  });
+
+  /* =========================================================
+     HEADER: scroll behaviour (hide on down, show on up)
+  ========================================================== */
+  var header = document.getElementById('siteHeader');
+  var lastY = window.scrollY;
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    header.classList.toggle('header-scrolled', y > 10);
+    if (y > lastY && y > 140){ header.classList.add('header-hidden'); }
+    else { header.classList.remove('header-hidden'); }
+    lastY = y;
+  }, { passive:true });
+
+  /* =========================================================
+     MOBILE MENU
+  ========================================================== */
+  var mobileMenu = document.getElementById('mobileMenu');
+  document.getElementById('menuToggle').addEventListener('click', function(){
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('menuClose').addEventListener('click', closeMobileMenu);
+  mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMobileMenu); });
+  function closeMobileMenu(){
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* =========================================================
+     SMOOTH SCROLL (data-scroll-to + in-page anchors)
+  ========================================================== */
+  function scrollToSelector(sel){
+    var target = document.querySelector(sel);
+    if (target){ target.scrollIntoView({ behavior:'smooth', block:'start' }); }
+  }
+  document.querySelectorAll('[data-scroll-to]').forEach(function(btn){
+    btn.addEventListener('click', function(){ scrollToSelector(btn.getAttribute('data-scroll-to')); });
+  });
+
+  /* =========================================================
+     REVEAL ON SCROLL
+  ========================================================== */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+    });
+  }, { threshold:0.14 });
+  document.querySelectorAll('.reveal, .how-step').forEach(function(el){ io.observe(el); });
+
+  /* =========================================================
+     COUNTDOWN — next Sunday 16:30, real running countdown
+  ========================================================== */
+  function getNextDropDate(){
+    var now = new Date();
+    var target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 30, 0, 0);
+    var day = now.getDay(); // 0 = Sunday
+    var daysUntilSunday = (7 - day) % 7;
+    target.setDate(target.getDate() + daysUntilSunday);
+    if (target <= now){ target.setDate(target.getDate() + 7); }
+    return target;
+  }
+  var dropDate = getNextDropDate();
+  var cdDays = document.getElementById('cdDays'),
+      cdHours = document.getElementById('cdHours'),
+      cdMinutes = document.getElementById('cdMinutes'),
+      cdSeconds = document.getElementById('cdSeconds');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tickCountdown(){
+    var diff = dropDate - new Date();
+    if (diff <= 0){ dropDate = getNextDropDate(); diff = dropDate - new Date(); }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    cdDays.textContent = pad(d); cdHours.textContent = pad(h);
+    cdMinutes.textContent = pad(m); cdSeconds.textContent = pad(s);
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  /* =========================================================
+     CART — demo state, structured for a future Shopify Cart swap.
+     cart line shape mirrors a Shopify line item: { id, title, price, image, category, qty }
+  ========================================================== */
+  var cart = [];
+  var cartPanel = document.getElementById('cartPanel');
+  var cartOverlay = document.getElementById('cartOverlay');
+  var cartItemsEl = document.getElementById('cartItems');
+  var cartCountEl = document.getElementById('cartCount');
+  var cartSubtotalEl = document.getElementById('cartSubtotal');
+
+  function findProduct(id){ return PRODUCTS.find(function(p){ return p.id === id; }); }
+
+  function addToCart(id, qty){
+    qty = qty || 1;
+    var product = findProduct(id);
+    if (!product) return;
+    var line = cart.find(function(l){ return l.id === id; });
+    if (line){ line.qty += qty; } else {
+      cart.push({ id:product.id, title:product.title, category:product.category, price:product.price, image:product.image, phVariant:product.phVariant, qty: qty });
+    }
+    renderCart();
+    openCart();
+    showToast(product.title + ' added to cart');
+  }
+  function changeQty(id, delta){
+    var line = cart.find(function(l){ return l.id === id; });
+    if (!line) return;
+    line.qty += delta;
+    if (line.qty <= 0){ cart = cart.filter(function(l){ return l.id !== id; }); }
+    renderCart();
+  }
+  function removeFromCart(id){
+    cart = cart.filter(function(l){ return l.id !== id; });
+    renderCart();
+  }
+  function renderCart(){
+    var totalQty = cart.reduce(function(sum,l){ return sum + l.qty; }, 0);
+    cartCountEl.textContent = totalQty;
+    cartCountEl.classList.toggle('show', totalQty > 0);
+
+    if (cart.length === 0){
+      cartItemsEl.innerHTML = '<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 6h2l1.6 10.6A2 2 0 0 0 8.6 18.4h8.8a2 2 0 0 0 2-1.7L20.5 8H6"/></svg><p>Your cart is empty.</p></div>';
+    } else {
+      cartItemsEl.innerHTML = cart.map(function(l){
+        return '' +
+          '<div class="cart-line" data-line="' + l.id + '">' +
+            '<div class="media"><img alt="' + l.title + '"></div>' +
+            '<div class="cart-line-body">' +
+              '<div class="cart-line-top"><span class="cart-line-title">' + l.title + '</span><span class="cart-line-price">' + fmt(l.price * l.qty) + '</span></div>' +
+              '<span class="cart-line-cat">' + l.category + '</span>' +
+              '<div class="cart-line-bottom">' +
+                '<div class="qty-stepper">' +
+                  '<button data-qty-minus="' + l.id + '">−</button><span>' + l.qty + '</span><button data-qty-plus="' + l.id + '">+</button>' +
+                '</div>' +
+                '<button class="cart-remove" data-remove="' + l.id + '">Remove</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }).join('');
+      cart.forEach(function(l){
+        var img = cartItemsEl.querySelector('[data-line="' + l.id + '"] img');
+        if (img) window.PV_resolveImage(img, l.image, l.title, l.phVariant, l.title);
+      });
+    }
+    var subtotal = cart.reduce(function(sum,l){ return sum + l.price * l.qty; }, 0);
+    cartSubtotalEl.textContent = fmt(subtotal);
+  }
+  cartItemsEl.addEventListener('click', function(e){
+    var plus = e.target.closest('[data-qty-plus]');
+    var minus = e.target.closest('[data-qty-minus]');
+    var remove = e.target.closest('[data-remove]');
+    if (plus) changeQty(plus.getAttribute('data-qty-plus'), 1);
+    if (minus) changeQty(minus.getAttribute('data-qty-minus'), -1);
+    if (remove) removeFromCart(remove.getAttribute('data-remove'));
+  });
+
+  function openCart(){ cartPanel.classList.add('open'); cartOverlay.classList.add('show'); }
+  function closeCart(){ cartPanel.classList.remove('open'); cartOverlay.classList.remove('show'); }
+  document.getElementById('cartToggle').addEventListener('click', openCart);
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', function(){ closeCart(); closeQuickView(); });
+
+  document.body.addEventListener('click', function(e){
+    var addBtn = e.target.closest('[data-add]');
+    if (addBtn){ addToCart(addBtn.getAttribute('data-add')); }
+  });
+
+  /* =========================================================
+     TOAST
+  ========================================================== */
+  var toast = document.getElementById('toast');
+  var toastText = document.getElementById('toastText');
+  var toastTimer;
+  function showToast(msg){
+    toastText.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+  }
+
+  /* =========================================================
+     QUICK VIEW MODAL (Bundles + Pieces)
+  ========================================================== */
+  var qvModal = document.getElementById('qvModal');
+  var qvMedia = document.getElementById('qvMedia');
+  var qvCat = document.getElementById('qvCat');
+  var qvTitle = document.getElementById('qvTitle');
+  var qvPrice = document.getElementById('qvPrice');
+  var qvDesc = document.getElementById('qvDesc');
+  var qvAdd = document.getElementById('qvAddToCart');
+  var currentQvId = null;
+
+  function openQuickView(id){
+    var p = findProduct(id);
+    if (!p) return;
+    currentQvId = id;
+    qvCat.textContent = (p.type === 'bundle' ? p.count + ' PIECES · ' : '') + p.category.toUpperCase();
+    qvTitle.textContent = p.title;
+    qvPrice.textContent = fmt(p.price);
+    qvDesc.innerHTML = p.description;
+    window.PV_resolveImage(qvMedia.querySelector('img'), p.image, p.title, p.phVariant, p.title);
+    qvModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeQuickView(){
+    qvModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.body.addEventListener('click', function(e){
+    var qvBtn = e.target.closest('[data-qv]');
+    if (qvBtn){ openQuickView(qvBtn.getAttribute('data-qv')); }
+  });
+  document.getElementById('qvClose').addEventListener('click', closeQuickView);
+  document.getElementById('qvCloseBtn').addEventListener('click', closeQuickView);
+  document.getElementById('qvOverlay').addEventListener('click', closeQuickView);
+  qvAdd.addEventListener('click', function(){
+    if (currentQvId){ addToCart(currentQvId); closeQuickView(); }
+  });
+
+  /* ESC closes any open overlay */
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){ closeCart(); closeQuickView(); closeMobileMenu(); }
+  });
+
+  /* footer year */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  renderCart();
+})();
+</script>
+</body>
+</html>
