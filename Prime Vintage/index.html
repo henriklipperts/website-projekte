@@ -1324,9 +1324,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     imgEl.src = realSrc; // if real Shopify/product images exist later, this loads them directly
   };
 
-  // category / offer imagery — real product photos, falls back to the generated placeholder if the file is missing
-  window.PV_resolveImage(document.getElementById('catBundlesImg'), 'images/categories/bundles.jpg', 'BUNDLES', 'pink', 'Curated bundles for resellers');
-  window.PV_resolveImage(document.getElementById('catPiecesImg'), 'images/categories/pieces.jpg', 'PIECES', 'blue', 'Individual vintage and Y2K pieces');
+  // offer imagery — a literal priced product (Y2K jeans), stays a real photo, not a stock-swap candidate
   window.PV_resolveImage(document.getElementById('offerImg'), 'images/promo/y2k-jeans-promo.jpg', 'Y2K JEANS', 'pink', 'Y2K jeans limited drop');
 
   /* =========================================================
@@ -1338,6 +1336,12 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
      back to `fallback` (an existing real product photo) or, failing
      that, the generated placeholder — the page never shows a broken
      image while art direction is still in progress.
+
+     hero / drop have no equivalent real photo today, so they fall
+     straight to the placeholder until a src is chosen. bundlesPanel /
+     piecesPanel already have a real product photo as a solid default —
+     an external photo here is an upgrade to consider, not a fix for
+     something broken.
   ========================================================== */
   var CAMPAIGN_IMAGES = {
     hero: {
@@ -1351,6 +1355,18 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
       fallback: null,
       seed: 'NEXT DROP', variant: 'mixed',
       alt: 'Underground fashion drop — limited pieces'
+    },
+    bundlesPanel: {
+      src: '', // TODO: optional upgrade (see brief: "BUNDLES") — real photo below is already a solid default
+      fallback: 'images/categories/bundles.jpg',
+      seed: 'BUNDLES', variant: 'pink',
+      alt: 'Curated bundles for resellers'
+    },
+    piecesPanel: {
+      src: '', // TODO: optional upgrade (see brief: "PIECES") — real photo below is already a solid default
+      fallback: 'images/categories/pieces.jpg',
+      seed: 'PIECES', variant: 'blue',
+      alt: 'Individual vintage and Y2K pieces'
     }
   };
   function resolveCampaignImage(imgEl, cfg){
@@ -1367,6 +1383,8 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   }
   resolveCampaignImage(document.getElementById('heroImg'), CAMPAIGN_IMAGES.hero);
   resolveCampaignImage(document.getElementById('dropImg'), CAMPAIGN_IMAGES.drop);
+  resolveCampaignImage(document.getElementById('catBundlesImg'), CAMPAIGN_IMAGES.bundlesPanel);
+  resolveCampaignImage(document.getElementById('catPiecesImg'), CAMPAIGN_IMAGES.piecesPanel);
 
   /* =========================================================
      RENDER: BUNDLES + PIECES
