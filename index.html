@@ -652,13 +652,19 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .cart-note{ font-size:11.5px; color:var(--gray-text); text-align:center; }
 
 /* ============ TOAST ============ */
+/* Hidden state uses a fixed off-screen "bottom" instead of a percentage
+   transform: translateY(140%) scales against the toast's OWN height, so
+   depending on its content that left a few pixels of the white pill
+   peeking above the viewport edge on every single page, permanently —
+   not just during the add-to-cart animation. A fixed -120px has no such
+   dependency and clears any realistic toast height. */
 .toast{
-  position:fixed; left:50%; bottom:28px; transform:translate(-50%,140%);
+  position:fixed; left:50%; bottom:-120px; transform:translateX(-50%);
   background:var(--white); color:var(--black); padding:14px 22px; border-radius:999px;
   display:flex; align-items:center; gap:12px; font-size:13px; font-weight:600;
-  z-index:900; transition:transform .5s var(--ease); box-shadow:0 20px 40px rgba(0,0,0,.4);
+  z-index:900; transition:bottom .5s var(--ease); box-shadow:0 20px 40px rgba(0,0,0,.4);
 }
-.toast.show{ transform:translate(-50%,0); }
+.toast.show{ bottom:28px; }
 .toast .dot{ width:8px;height:8px;border-radius:50%; background:var(--pink); flex:none; }
 
 /* ============ QUICK VIEW MODAL ============ */
