@@ -57,7 +57,10 @@ img{ max-width:100%; display:block; }
 a{ color:inherit; text-decoration:none; }
 button{ font-family:inherit; cursor:pointer; }
 ul{ margin:0; padding:0; list-style:none; }
-h1,h2,h3,h4{ margin:0; font-family:var(--ff-display); font-weight:400; letter-spacing:.01em; }
+/* Negative tracking on the display face: Bebas Neue reads as a confident
+   poster/jersey-number face when set tight, not with the neutral positive
+   spacing a UI font usually gets. */
+h1,h2,h3,h4{ margin:0; font-family:var(--ff-display); font-weight:400; letter-spacing:-0.01em; }
 p{ margin:0; }
 .container{
   width:100%;
@@ -73,23 +76,21 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 ::-webkit-scrollbar-track{ background:var(--black); }
 ::-webkit-scrollbar-thumb{ background:#333; border:2px solid var(--black); border-radius:8px; }
 
+/* Bracketed hang-tag label instead of a dot-plus-caps "eyebrow" — the
+   pink-dot kicker above every headline is one of the most common
+   AI-landing-page tells. Brackets read like a SKU/price-tag stamp, which
+   fits a resale brand instead of a generic template default. */
 .eyebrow{
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  font-size:12px;
-  letter-spacing:.2em;
+  font-size:11px;
+  letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--gray-text);
-  font-weight:600;
+  font-weight:700;
 }
-.eyebrow::before{
-  content:'';
-  width:7px; height:7px;
-  background:var(--pink);
-  border-radius:50%;
-  flex:none;
-}
+.eyebrow::before{ content:'[ '; }
+.eyebrow::after{ content:' ]'; }
 .on-light .eyebrow{ color:var(--gray-text-dark); }
 
 .headline-xl{
@@ -97,7 +98,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   font-size: clamp(2.8rem, 8vw, 6.4rem);
   line-height:.92;
   text-transform:uppercase;
-  letter-spacing:.005em;
+  letter-spacing:-0.01em;
 }
 .headline-lg{
   font-family:var(--ff-display);
@@ -163,10 +164,6 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 /* Reveal animation */
 .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
 .reveal.in-view{ opacity:1; transform:translateY(0); }
-.reveal-delay-1{ transition-delay:.08s; }
-.reveal-delay-2{ transition-delay:.16s; }
-.reveal-delay-3{ transition-delay:.24s; }
-.reveal-delay-4{ transition-delay:.32s; }
 
 /* ============ PLACEHOLDER MEDIA ============ */
 .media{
@@ -225,17 +222,22 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   font-size:13px; letter-spacing:.12em; font-weight:600; text-transform:uppercase;
   position:relative; padding:6px 0; color:var(--white);
 }
+/* Flat pink, not a pink-to-blue gradient: pink and blue each carry a
+   distinct meaning elsewhere (bundles vs. pieces) — blending them here
+   into decorative gradient soup undermines that system. */
 .main-nav a::after{
   content:''; position:absolute; left:0; bottom:0; height:2px; width:0;
-  background:linear-gradient(90deg, var(--pink), var(--blue));
+  background:var(--pink);
   transition:width .35s var(--ease);
 }
 .main-nav a:hover::after, .main-nav a:focus-visible::after{ width:100%; }
 
 .header-actions{ display:flex; align-items:center; gap:8px; }
+/* Square, not round: the Prime Vintage mark is a hard-angled racing badge —
+   circular chrome buttons read as generic app UI and fight the logo. */
 .icon-btn{
   width:42px; height:42px; display:flex; align-items:center; justify-content:center;
-  border:1px solid var(--line); border-radius:50%; background:transparent; color:var(--white);
+  border:1px solid var(--line); background:transparent; color:var(--white);
   transition:border-color .3s, background .3s, transform .3s;
   position:relative;
 }
@@ -263,7 +265,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   height:var(--header-h); padding:0 24px; border-bottom:1px solid var(--line);
 }
 .mobile-menu-close{
-  width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:none;color:var(--white);
+  width:42px;height:42px;border:1px solid var(--line);background:none;color:var(--white);
   display:flex;align-items:center;justify-content:center;
 }
 .mobile-menu nav{ flex:1; display:flex; flex-direction:column; justify-content:center; padding:24px 32px; gap:6px; }
@@ -291,13 +293,10 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.55) 62%, var(--black) 100%);
 }
-.hero-media::before{
-  content:''; position:absolute; inset:0; z-index:1;
-  background:
-    radial-gradient(circle at 14% 20%, var(--pink-soft), transparent 45%),
-    radial-gradient(circle at 86% 30%, var(--blue-soft), transparent 45%);
-  mix-blend-mode:screen;
-}
+/* No ambient pink/blue "glow blob" here — that radial-gradient pair is a
+   copy-pasted AI-landing-page ambient effect, not a real lighting choice.
+   The photo itself carries the mood; a dark gradient for legibility is
+   enough. */
 .hero-content{
   position:relative; z-index:2;
   padding-top: 40px;
@@ -306,22 +305,30 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .hero-grid{
   display:grid; grid-template-columns: 1.6fr .9fr; gap:40px; align-items:end;
 }
-.hero-title{ font-family:var(--ff-display); text-transform:uppercase; font-size:clamp(3.4rem, 10vw, 8.2rem); line-height:.88; }
-.hero-title .line{ display:block; overflow:hidden; }
-.hero-title .line span{ display:inline-block; transform:translateY(110%); animation:hero-line-up .9s var(--ease) forwards; }
-.hero-title .line:nth-child(1) span{ animation-delay:.05s; }
-.hero-title .line:nth-child(2) span{ animation-delay:.18s; color:var(--pink); }
-.hero-title .line:nth-child(3) span{ animation-delay:.31s; -webkit-text-stroke:2px var(--white); color:transparent; }
-@keyframes hero-line-up{ to{ transform:translateY(0); } }
+/* One clean fade instead of a staggered per-line slide-up plus a hollow
+   text-stroke on the third line: that stroke gimmick was never echoed
+   anywhere else on the page, so it read as a random flourish rather than
+   part of the type system. A single confident beat feels more deliberate
+   than a three-stage reveal sequence. */
+.hero-title{
+  font-family:var(--ff-display); text-transform:uppercase;
+  font-size:clamp(3.4rem, 10vw, 8.2rem); line-height:.88;
+  opacity:0; animation:hero-fade-in .7s var(--ease) .1s forwards;
+}
+.hero-title .line{ display:block; }
+.hero-title .line:nth-child(2){ color:var(--pink); }
+@keyframes hero-fade-in{ to{ opacity:1; } }
 .hero-side{
   display:flex; flex-direction:column; gap:22px; padding-bottom:8px;
   border-left:1px solid var(--line); padding-left:24px;
 }
 .hero-actions{ display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; }
 .hero-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:36px; }
+/* Sharp corners, not pill shapes — matches the hard-angled logo mark and
+   the hang-tag language used for badges throughout the page. */
 .hero-tag{
   font-size:11px; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
-  border:1px solid var(--line); border-radius:999px; padding:8px 16px; color:var(--gray-text);
+  border:1px solid var(--line); padding:8px 16px; color:var(--gray-text);
 }
 .scroll-cue{
   position:absolute; right:24px; bottom:26px; z-index:2;
@@ -329,8 +336,9 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--gray-text);
   writing-mode:vertical-rl;
 }
-.scroll-cue .bar{ writing-mode:horizontal-tb; width:1px; height:46px; background:linear-gradient(var(--white), transparent); animation:cue-move 1.8s ease-in-out infinite; }
-@keyframes cue-move{ 0%,100%{ opacity:.3;} 50%{opacity:1;} }
+/* Static, not an infinite pulse — a looping animation that never resolves
+   is decorative motion with no purpose once you've seen it twice. */
+.scroll-cue .bar{ writing-mode:horizontal-tb; width:1px; height:46px; background:linear-gradient(var(--white), transparent); }
 
 /* ============ SPLIT: WHAT ARE YOU LOOKING FOR ============ */
 .split-intro{ padding-top:88px; padding-bottom:36px; text-align:center; }
@@ -402,7 +410,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .bundle-badge{
   position:absolute; top:14px; left:14px; z-index:2;
   background:var(--black); border:1px solid var(--line); color:var(--white);
-  font-size:11px; letter-spacing:.1em; font-weight:700; padding:7px 12px; border-radius:999px;
+  font-size:11px; letter-spacing:.1em; font-weight:700; padding:7px 12px;
   text-transform:uppercase;
 }
 .bundle-body{ padding:24px 22px 26px; display:flex; flex-direction:column; gap:10px; flex:1; }
@@ -445,19 +453,19 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   padding:110px 0; text-align:center;
   border-top:1px solid var(--line); border-bottom:1px solid var(--line);
 }
-.drop-section::before{
-  content:''; position:absolute; inset:0;
-  background:
-    radial-gradient(circle at 20% 30%, var(--pink-soft), transparent 40%),
-    radial-gradient(circle at 80% 70%, var(--blue-soft), transparent 40%);
-}
+/* Same ambient-glow blob as the hero, just re-positioned — a copy-pasted
+   effect rather than a real decision, so it's gone. The section already
+   has a border top/bottom and a dark field; it doesn't need atmosphere. */
 .drop-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:20px; }
 .drop-when{ font-family:var(--ff-display); font-size:clamp(1.4rem,3vw,2rem); letter-spacing:.05em; color:var(--gray-text); }
 .drop-when b{ color:var(--white); }
 .drop-title{ font-size:clamp(3rem,9vw,6.5rem); }
 .countdown{ display:flex; gap:14px; margin-top:26px; }
+/* Dashed border reads as a perforated ticket stub instead of a flat
+   SaaS stat card — a small detail, but it's the difference between a
+   generic countdown widget and a drop ticket. */
 .countdown .cd-box{
-  width:100px; background:var(--near-black); border:1px solid var(--line);
+  width:100px; background:var(--near-black); border:1px dashed rgba(255,255,255,.3);
   padding:20px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;
 }
 .countdown .cd-num{ font-family:var(--ff-display); font-size:2.6rem; line-height:1; font-variant-numeric:tabular-nums; }
@@ -471,13 +479,12 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .alert-text h3{ font-size:clamp(2rem,4.4vw,3rem); }
 .alert-text p{ font-weight:600; margin-top:6px; }
 .alert-actions{ display:flex; gap:14px; flex-wrap:wrap; }
-.marquee{
-  border-top:1px solid rgba(10,10,10,.25); border-bottom:1px solid rgba(10,10,10,.25);
-  overflow:hidden; white-space:nowrap; padding:14px 0; margin-top:44px;
-}
-.marquee-track{ display:inline-flex; gap:40px; animation:marquee 22s linear infinite; }
-.marquee span{ font-family:var(--ff-display); font-size:1.4rem; text-transform:uppercase; letter-spacing:.04em; }
-@keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+/* Removed the infinite marquee ticker that used to run here — a generic
+   Shopify-template trope borrowed from a hundred other stores. The
+   countdown section above already carries the urgency signal; a second
+   looping banner was redundant motion, not reinforcement. */
+.btn-dark{ background:var(--black); color:var(--white); }
+.btn-dark:hover{ background:var(--white); color:var(--black); transform:translateY(-2px); }
 
 /* ============ SPECIAL OFFER ============ */
 .offer-section{ background:var(--black); padding:0; }
@@ -502,43 +509,49 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .offer-content .btn{ margin-top:26px; }
 
 /* ============ WHY / ABOUT ============ */
+/* Replaces a 4-up "icon in a circle" feature grid — the single most
+   common AI-generated SaaS pattern there is. A dashed-divider tag strip
+   reads like a garment care label instead, no icons needed. */
 .why-section{ background:var(--off-white); color:var(--black); padding-bottom:110px; }
-.why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(10,10,10,.1); border:1px solid rgba(10,10,10,.1); }
-.why-card{ background:var(--off-white); padding:38px 28px; display:flex; flex-direction:column; gap:16px; }
-.why-icon{ width:46px; height:46px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(10,10,10,.25); border-radius:50%; }
-.why-icon svg{ width:22px; height:22px; }
-.why-card h3{ font-size:1.3rem; text-transform:uppercase; }
-.why-card p{ color:var(--gray-text-dark); font-size:14px; }
+.why-strip{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(10,10,10,.16); border-bottom:1px solid rgba(10,10,10,.16); }
+.why-item{ padding:32px 28px; border-left:1px dashed rgba(10,10,10,.2); }
+.why-item:first-child{ border-left:none; }
+.why-label{ display:block; font-family:var(--ff-display); font-size:1.4rem; text-transform:uppercase; letter-spacing:-0.01em; margin-bottom:8px; }
+.why-item p{ color:var(--gray-text-dark); font-size:14px; }
 
 /* ============ HOW IT WORKS ============ */
+/* Same tag-strip system as Why-Us, reused deliberately (not a second
+   random grid) — the outline jersey-number treatment stays because it
+   reads like a race-number/garment-size print, but the animated
+   gradient "progress connector" is gone: it was the generic SaaS
+   step-indicator pattern and didn't mean anything (no step is ever
+   actually "in progress"). */
 .how-section{ background:var(--black); padding-bottom:110px; }
-.how-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:28px; }
-.how-step{ position:relative; padding-top:26px; border-top:1px solid var(--line); }
-.how-num{ font-family:var(--ff-display); font-size:3.4rem; color:transparent; -webkit-text-stroke:1.4px var(--gray-text); line-height:1; }
-.how-step h3{ margin-top:16px; font-size:1.3rem; text-transform:uppercase; }
-.how-step p{ margin-top:10px; color:var(--gray-text); font-size:14px; max-width:26ch; }
-.how-step .how-connector{ position:absolute; top:-1px; left:0; height:2px; width:0; background:linear-gradient(90deg,var(--pink),var(--blue)); transition:width .8s var(--ease); }
-.how-step.in-view .how-connector{ width:100%; }
+.how-strip{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.how-item{ padding:32px 28px; border-left:1px dashed var(--line); }
+.how-item:first-child{ border-left:none; }
+.how-num{ font-family:var(--ff-display); font-size:3rem; color:transparent; -webkit-text-stroke:1.4px var(--gray-text); line-height:1; }
+.how-item h3{ margin-top:16px; font-size:1.2rem; text-transform:uppercase; }
+.how-item p{ margin-top:8px; color:var(--gray-text); font-size:14px; max-width:26ch; }
 
-/* ============ COMMUNITY CTA ============ */
-.community-section{
-  background:var(--near-black); text-align:center; padding:120px 0;
-  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-  position:relative; overflow:hidden;
-}
-.community-section h2{ font-size:clamp(2.6rem,7vw,5rem); max-width:16ch; margin:0 auto; }
-.community-section h2 .hl{ background:linear-gradient(90deg,var(--pink),var(--blue)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.community-section p{ max-width:56ch; margin:22px auto 32px; color:var(--gray-text); }
-.community-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+/* Community CTA section removed: it repeated the exact same "join
+   WhatsApp / follow Instagram / don't miss the drop" message as the Drop
+   Alert section above, just in different words, plus a pink→blue
+   gradient-clip headline (a very recognisable AI-landing-page flourish).
+   Three sections all pushing the same action is padding, not content —
+   Drop Alert already carries this call once, clearly. */
 
 /* ============ SOCIAL PROOF ============ */
 .proof-section{ background:var(--black); padding:100px 0 110px; }
 .proof-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+/* Left accent bar instead of a 5-star row: a star rating is the default
+   "SaaS review card" trope and reads nothing like a streetwear community
+   — the quote and handle carry the authenticity on their own. */
 .proof-card{
-  background:var(--near-black); border:1px solid var(--line); padding:30px 26px;
-  display:flex; flex-direction:column; gap:18px;
+  background:var(--near-black); border:1px solid var(--line); border-left:3px solid var(--pink);
+  padding:30px 26px;
+  display:flex; flex-direction:column; gap:14px;
 }
-.proof-stars{ color:var(--pink); letter-spacing:2px; font-size:15px; }
 .proof-quote{ font-size:16px; line-height:1.6; }
 .proof-name{ font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-text); font-weight:700; }
 
@@ -635,7 +648,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .qv-box .media{ min-height:340px; }
 .qv-body{ padding:38px; display:flex; flex-direction:column; gap:14px; }
 .qv-close{
-  position:absolute; top:16px; right:16px; z-index:3; width:38px; height:38px; border-radius:50%;
+  position:absolute; top:16px; right:16px; z-index:3; width:38px; height:38px;
   background:var(--black); border:1px solid var(--line); color:var(--white); display:flex; align-items:center; justify-content:center;
 }
 .qv-cat{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); font-weight:700; }
@@ -648,8 +661,8 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 @media (max-width:1080px){
   .bundle-grid{ grid-template-columns:repeat(2,1fr); }
   .piece-grid{ grid-template-columns:repeat(2,1fr); }
-  .why-grid{ grid-template-columns:repeat(2,1fr); }
-  .how-grid{ grid-template-columns:repeat(2,1fr); row-gap:44px; }
+  .why-strip, .how-strip{ grid-template-columns:repeat(2,1fr); }
+  .why-item:nth-child(3), .how-item:nth-child(3){ border-left:none; }
   .footer-top{ grid-template-columns:1fr 1fr; row-gap:44px; }
   .hero-grid{ grid-template-columns:1fr; }
   .hero-side{ border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px; }
@@ -657,7 +670,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 @media (max-width:860px){
   .main-nav, .header-actions .icon-btn.hide-mobile{ display:none; }
   .hamburger{
-    display:flex; width:42px; height:42px; border:1px solid var(--line); border-radius:50%;
+    display:flex; width:42px; height:42px; border:1px solid var(--line);
     align-items:center; justify-content:center; background:none; color:var(--white);
   }
   .logo{ height:32px; }
@@ -670,8 +683,12 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 }
 @media (max-width:680px){
   .container{ padding:0 18px; }
-  .bundle-grid, .piece-grid, .why-grid{ grid-template-columns:repeat(2,1fr); }
-  .how-grid{ grid-template-columns:1fr; }
+  .bundle-grid, .piece-grid{ grid-template-columns:repeat(2,1fr); }
+  .why-strip, .how-strip{ grid-template-columns:1fr; }
+  .why-item, .how-item{ border-left:none; }
+  .why-item{ border-top:1px dashed rgba(10,10,10,.2); }
+  .how-item{ border-top:1px dashed var(--line); }
+  .why-item:first-child, .how-item:first-child{ border-top:none; }
   .footer-top{ grid-template-columns:1fr 1fr; }
   .footer-brand{ grid-column:1 / -1; }
   .proof-grid{ grid-template-columns:1fr; }
@@ -684,7 +701,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   .cart-panel{ width:100%; }
 }
 @media (max-width:420px){
-  .bundle-grid, .piece-grid, .why-grid{ grid-template-columns:1fr; }
+  .bundle-grid, .piece-grid{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -760,9 +777,9 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     <div class="container hero-content">
       <div class="hero-grid">
         <h1 class="hero-title">
-          <span class="line"><span>VINTAGE.</span></span>
-          <span class="line"><span>Y2K.</span></span>
-          <span class="line"><span>YOUR STYLE.</span></span>
+          <span class="line">VINTAGE.</span>
+          <span class="line">Y2K.</span>
+          <span class="line">YOUR STYLE.</span>
         </h1>
         <div class="hero-side reveal">
           <p class="lede">Curated vintage pieces, Y2K denim &amp; rare sportswear — sourced, sorted and shipped for resellers and collectors who don't want the same five hoodies as everyone else.</p>
@@ -838,11 +855,11 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   <!-- =========================================================
        PIECES
   ========================================================== -->
-  <section class="pieces-section" id="pieces">
+  <section class="pieces-section on-light" id="pieces">
     <div class="container">
       <div class="section-head tight reveal">
         <div class="htext">
-          <span class="eyebrow">Latest Pieces</span>
+          <span class="eyebrow">One Of One</span>
           <h2 class="headline-lg">Latest Pieces</h2>
         </div>
         <p class="lede">One of one. No restock. Once a piece is gone, it's gone for good — that's the drop.</p>
@@ -883,14 +900,8 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
         <p>New pieces. Limited quantities. Be first or miss out.</p>
       </div>
       <div class="alert-actions">
-        <a href="https://wa.me/491234567890" target="_blank" rel="noopener" class="btn" style="background:var(--black); color:var(--white);">Join WhatsApp</a>
+        <a href="https://wa.me/491234567890" target="_blank" rel="noopener" class="btn btn-dark">Join WhatsApp</a>
         <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn-outline on-light">Follow Instagram</a>
-      </div>
-    </div>
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Limited Pieces</span><span>·</span><span>No Restock</span><span>·</span><span>New Drop Every Sunday</span><span>·</span>
-        <span>Limited Pieces</span><span>·</span><span>No Restock</span><span>·</span><span>New Drop Every Sunday</span><span>·</span>
       </div>
     </div>
   </section>
@@ -916,7 +927,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   <!-- =========================================================
        WHY PRIME VINTAGE
   ========================================================== -->
-  <section class="why-section" id="about">
+  <section class="why-section on-light" id="about">
     <div class="container">
       <div class="section-head reveal">
         <div class="htext">
@@ -924,25 +935,21 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
           <h2 class="headline-lg">Why Prime Vintage</h2>
         </div>
       </div>
-      <div class="why-grid">
-        <div class="why-card reveal">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 8l7-5 7 5M5 8v9l7 5 7-5V8"/></svg></div>
-          <h3>No Minimum Order</h3>
+      <div class="why-strip">
+        <div class="why-item">
+          <span class="why-label">No Minimum</span>
           <p>Order from just 1 piece.</p>
         </div>
-        <div class="why-card reveal reveal-delay-1">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.6-9.5-9C.5 8 2 4 6 4c2.2 0 3.6 1.3 6 3.6C14.4 5.3 15.8 4 18 4c4 0 5.5 4 3.5 8-2.5 4.4-9.5 9-9.5 9Z"/></svg></div>
-          <h3>Handpicked Pieces</h3>
+        <div class="why-item">
+          <span class="why-label">Handpicked</span>
           <p>Curated vintage &amp; Y2K pieces.</p>
         </div>
-        <div class="why-card reveal reveal-delay-2">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18M3 12h18"/></svg></div>
-          <h3>Many Brands</h3>
+        <div class="why-item">
+          <span class="why-label">Many Brands</span>
           <p>From Y2K to sportswear.</p>
         </div>
-        <div class="why-card reveal reveal-delay-3">
-          <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="14" height="11" rx="1"/><path d="M16 10h3l3 3v5h-6"/><circle cx="7" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></svg></div>
-          <h3>Fast Shipping</h3>
+        <div class="why-item">
+          <span class="why-label">Fast Shipping</span>
           <p>Every order carefully packed.</p>
         </div>
       </div>
@@ -960,25 +967,11 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
           <h2 class="headline-lg">How It Works</h2>
         </div>
       </div>
-      <div class="how-grid">
-        <div class="how-step reveal"><div class="how-connector"></div><span class="how-num">01</span><h3>Choose Your Category</h3><p>Bundles or individual pieces.</p></div>
-        <div class="how-step reveal reveal-delay-1"><div class="how-connector"></div><span class="how-num">02</span><h3>Find Your Pieces</h3><p>Explore the latest drop.</p></div>
-        <div class="how-step reveal reveal-delay-2"><div class="how-connector"></div><span class="how-num">03</span><h3>Place Your Order</h3><p>Simple and fast.</p></div>
-        <div class="how-step reveal reveal-delay-3"><div class="how-connector"></div><span class="how-num">04</span><h3>Get Your Package</h3><p>Packed and shipped quickly.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================
-       COMMUNITY CTA
-  ========================================================== -->
-  <section class="community-section">
-    <div class="container reveal">
-      <h2>Don't Miss The <span class="hl">Next Drop.</span></h2>
-      <p>Join the Prime Vintage community and get notified about new drops, exclusive pieces and special deals.</p>
-      <div class="community-actions">
-        <a href="https://wa.me/491234567890" target="_blank" rel="noopener" class="btn btn-pink">Join WhatsApp</a>
-        <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn-outline">Follow Instagram</a>
+      <div class="how-strip">
+        <div class="how-item"><span class="how-num">01</span><h3>Choose Your Category</h3><p>Bundles or individual pieces.</p></div>
+        <div class="how-item"><span class="how-num">02</span><h3>Find Your Pieces</h3><p>Explore the latest drop.</p></div>
+        <div class="how-item"><span class="how-num">03</span><h3>Place Your Order</h3><p>Simple and fast.</p></div>
+        <div class="how-item"><span class="how-num">04</span><h3>Get Your Package</h3><p>Packed and shipped quickly.</p></div>
       </div>
     </div>
   </section>
@@ -1002,7 +995,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   <!-- =========================================================
        FAQ
   ========================================================== -->
-  <section class="faq-section" id="faq">
+  <section class="faq-section on-light" id="faq">
     <div class="container">
       <div class="section-head reveal">
         <div class="htext">
@@ -1333,9 +1326,13 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   var bundleGrid = document.getElementById('bundleGrid');
   var pieceGrid = document.getElementById('pieceGrid');
 
+  /* Cards render without a per-item .reveal fade — animating every single
+     grid tile on scroll (the previous behaviour) is motion as a blanket
+     utility rather than a deliberate signal. The section header above
+     each grid still reveals once; that's enough. */
   PRODUCTS.filter(function(p){ return p.type === 'bundle'; }).forEach(function(p, i){
     var card = document.createElement('article');
-    card.className = 'bundle-card reveal reveal-delay-' + ((i % 4) + 1);
+    card.className = 'bundle-card';
     card.innerHTML =
       '<div class="media">' +
         '<span class="bundle-badge">' + p.count + ' PIECES</span>' +
@@ -1353,7 +1350,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 
   PRODUCTS.filter(function(p){ return p.type === 'piece'; }).forEach(function(p, i){
     var card = document.createElement('article');
-    card.className = 'piece-card reveal reveal-delay-' + ((i % 4) + 1);
+    card.className = 'piece-card';
     card.innerHTML =
       '<div class="media">' +
         '<span class="piece-tag">' + p.category + '</span>' +
@@ -1381,12 +1378,11 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     { demo:true, quote:'Schneller Versand und gute Auswahl.', name:'@thriftbyleon' }
   ];
   var proofGrid = document.getElementById('proofGrid');
-  TESTIMONIALS.forEach(function(t, i){
+  TESTIMONIALS.forEach(function(t){
     var el = document.createElement('div');
-    el.className = 'proof-card reveal reveal-delay-' + (i+1);
+    el.className = 'proof-card';
     el.setAttribute('data-demo-content', 'true');
     el.innerHTML =
-      '<span class="proof-stars">★★★★★</span>' +
       '<p class="proof-quote">"' + t.quote + '"</p>' +
       '<span class="proof-name">' + t.name + '</span>';
     proofGrid.appendChild(el);
@@ -1439,7 +1435,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
       if (entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
     });
   }, { threshold:0.14 });
-  document.querySelectorAll('.reveal, .how-step').forEach(function(el){ io.observe(el); });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
   /* =========================================================
      COUNTDOWN — next Sunday 16:30, real running countdown
