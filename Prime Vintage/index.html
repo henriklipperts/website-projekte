@@ -1343,48 +1343,93 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     imgEl.src = realSrc; // if real Shopify/product images exist later, this loads them directly
   };
 
-  // offer imagery — a literal priced product (Y2K jeans), stays a real photo, not a stock-swap candidate
-  window.PV_resolveImage(document.getElementById('offerImg'), 'images/promo/y2k-jeans-promo.jpg', 'Y2K JEANS', 'pink', 'Y2K jeans limited drop');
-
   /* =========================================================
      CAMPAIGN IMAGERY — one place to manage every non-product photo
      used on the page, instead of scattering paths through the markup.
-     External Unsplash/Pexels sourcing was the original plan (`src`),
-     but this environment's network sandbox blocks every image/media
-     domain outright (Unsplash, Pexels, Pixabay, even Wikipedia —
-     verified, not assumed), with no browser tool available to route
-     around it. Rather than guess a photo ID from memory and risk a
-     broken or wrong image in a client-facing demo, hero and drop use
-     real supplied product photography as `fallback`, re-cropped and
-     graded (see .hero-media/.drop-media filters) to read as editorial
-     campaign stills rather than product shots. `src` stays wired and
-     empty: dropping in a real Unsplash/Pexels URL later is still a
-     one-line change, no other code involved.
+
+     External Unsplash/Pexels sourcing was the plan (`src`), but this
+     environment's network sandbox blocks every image/media domain
+     outright (Unsplash, Pexels, Pixabay, even Wikipedia — verified
+     with WebFetch and curl, not assumed), with no browser tool
+     available to route around it. Rather than guess a photo ID from
+     memory and risk a broken or wrong image in a client-facing demo,
+     every entry below runs on real supplied photography as `fallback`,
+     each re-cropped and art-directed specifically for its section
+     (rationale in each entry's comment). `src` stays wired and empty:
+     dropping in a verified Unsplash/Pexels URL later is a one-line
+     change, nothing else in the page needs to know.
+
+     Product photos (the 4 bundle cards + 8 piece cards in PRODUCTS,
+     further down) are deliberately NOT part of this system — they are
+     the actual items at an actual price, so swapping them for unrelated
+     stock would misrepresent the product. Those stay real photos.
   ========================================================== */
   var CAMPAIGN_IMAGES = {
     hero: {
-      src: '', // external campaign photo not available in this environment (see chat) — real photo used instead
+      // Composition: wide flat-lay, garments fill the frame edge-to-edge
+      // with no single focal subject — reads as "the whole world of
+      // pieces," not one product, which is what a hero needs to promise.
+      // Color: full brand palette present in-frame (red, green, navy,
+      // blue) without me needing to add pink/blue synthetically.
+      // Crop/text: dark pockets bottom-left give the headline a natural
+      // resting spot; graded down (see .hero-media filter) so white
+      // type stays legible without crushing the color underneath.
+      src: '',
       fallback: 'images/hero/hero-main.jpg',
       seed: 'PRIME VINTAGE HERO', variant: 'mixed',
       alt: 'Prime Vintage — curated Y2K and vintage streetwear'
     },
     drop: {
-      src: '', // external campaign photo not available in this environment (see chat) — real photo used instead
+      // Composition: two black hoods + a red-striped leg fill the frame
+      // like a lineup, not a laundry pile — reads as "assembled for
+      // something," which fits a countdown better than a flat product
+      // shot. Color: near-monochrome black with one red accent stripe,
+      // so it doesn't fight the pink CTA button sitting on top of it.
+      // Crop/text: heavy top-to-bottom scrim (.drop-media::after) plus
+      // extra darkening in the grade keeps the centered countdown
+      // numerals readable against a genuinely busy background.
+      src: '',
       fallback: 'images/drop/next-drop-bg.jpg',
       seed: 'NEXT DROP', variant: 'mixed',
       alt: 'Underground fashion drop — limited pieces'
     },
     bundlesPanel: {
-      src: '', // TODO: optional upgrade (see brief: "BUNDLES") — real photo below is already a solid default
+      // Motif: multiple distinct pairs of jeans stacked/overlapping in
+      // one frame — the "pile" reading the Bundles concept needs (many
+      // pieces, not one). Format: tall portrait crop suits the panel's
+      // half-viewport-height box without an awkward mid-crop.
+      // Text: panel copy sits bottom-left over a dark gradient; the
+      // pockets' varied tones keep that corner interesting instead of
+      // flat.
+      src: '',
       fallback: 'images/categories/bundles.jpg',
       seed: 'BUNDLES', variant: 'pink',
       alt: 'Curated bundles for resellers'
     },
     piecesPanel: {
-      src: '', // TODO: optional upgrade (see brief: "PIECES") — real photo below is already a solid default
+      // Motif: a single, tightly-cropped pocket (one label, one
+      // hardware detail) — deliberately the opposite of the Bundles
+      // panel's multi-item pile, so the two panels read as genuinely
+      // different offers at a glance, not the same photo twice.
+      // Color: cool blue denim tones pair with the panel's blue
+      // gradient overlay instead of fighting it.
+      src: '',
       fallback: 'images/categories/pieces.jpg',
       seed: 'PIECES', variant: 'blue',
       alt: 'Individual vintage and Y2K pieces'
+    },
+    offer: {
+      // Motif: has to be Y2K jeans specifically, since the banner text
+      // ("Y2K JEANS FROM 6,50€") makes a direct visual promise — a
+      // generic denim photo here would read as a mismatch the moment
+      // it's next to that copy. Format: wide landscape crop matches the
+      // full-bleed banner; the gradient overlay (.offer-box::before)
+      // is strongest on the left where the text sits, fading out to the
+      // right so the denim texture still reads clearly.
+      src: '',
+      fallback: 'images/promo/y2k-jeans-promo.jpg',
+      seed: 'Y2K JEANS', variant: 'pink',
+      alt: 'Y2K jeans limited drop'
     }
   };
   function resolveCampaignImage(imgEl, cfg){
@@ -1403,6 +1448,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   resolveCampaignImage(document.getElementById('dropImg'), CAMPAIGN_IMAGES.drop);
   resolveCampaignImage(document.getElementById('catBundlesImg'), CAMPAIGN_IMAGES.bundlesPanel);
   resolveCampaignImage(document.getElementById('catPiecesImg'), CAMPAIGN_IMAGES.piecesPanel);
+  resolveCampaignImage(document.getElementById('offerImg'), CAMPAIGN_IMAGES.offer);
 
   /* =========================================================
      RENDER: BUNDLES + PIECES
