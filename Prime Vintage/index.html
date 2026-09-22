@@ -454,8 +454,17 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   border-top:1px solid var(--line); border-bottom:1px solid var(--line);
 }
 /* Same ambient-glow blob as the hero, just re-positioned — a copy-pasted
-   effect rather than a real decision, so it's gone. The section already
-   has a border top/bottom and a dark field; it doesn't need atmosphere. */
+   effect rather than a real decision, so it's gone. In its place: an
+   actual campaign photo slot (see CAMPAIGN_IMAGES in the script), because
+   a drop countdown reads as an event, not a settings panel, when there's
+   real atmosphere behind it. Falls back to the generated placeholder
+   until a real photo is supplied. */
+.drop-media{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+.drop-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.drop-media::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(10,10,10,.55) 0%, rgba(10,10,10,.88) 100%);
+}
 .drop-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:20px; }
 .drop-when{ font-family:var(--ff-display); font-size:clamp(1.4rem,3vw,2rem); letter-spacing:.05em; color:var(--gray-text); }
 .drop-when b{ color:var(--white); }
@@ -809,7 +818,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     <div class="split-wrap">
       <div class="split-panel pink" id="panelBundles">
         <div class="media">
-          <img id="catBundlesImg" alt="Curated bundles for resellers">
+          <img id="catBundlesImg" alt="Curated bundles for resellers" loading="lazy">
         </div>
         <button class="split-hit" data-scroll-to="#bundles" aria-label="Go to Bundles"></button>
         <div class="split-panel-inner">
@@ -821,7 +830,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
       </div>
       <div class="split-panel blue" id="panelPieces">
         <div class="media">
-          <img id="catPiecesImg" alt="Individual vintage and Y2K pieces">
+          <img id="catPiecesImg" alt="Individual vintage and Y2K pieces" loading="lazy">
         </div>
         <button class="split-hit" data-scroll-to="#pieces" aria-label="Go to Pieces"></button>
         <div class="split-panel-inner">
@@ -875,6 +884,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
        NEXT DROP / COUNTDOWN
   ========================================================== -->
   <section class="drop-section" id="drops">
+    <div class="drop-media"><img id="dropImg" alt="Underground fashion drop — limited pieces" loading="lazy"></div>
     <div class="container drop-inner reveal">
       <span class="eyebrow">Next Drop</span>
       <h2 class="drop-title headline-xl">Next Drop</h2>
@@ -912,7 +922,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   <section class="offer-section">
     <div class="offer-box reveal">
       <div class="media">
-        <img id="offerImg" alt="Y2K jeans limited drop">
+        <img id="offerImg" alt="Y2K jeans limited drop" loading="lazy">
       </div>
       <div class="offer-content">
         <span class="offer-tag">Limited Drop</span>
@@ -1314,11 +1324,49 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     imgEl.src = realSrc; // if real Shopify/product images exist later, this loads them directly
   };
 
-  // static hero / category / offer imagery — falls back to the generated placeholder if the file is missing
-  window.PV_resolveImage(document.getElementById('heroImg'), 'images/hero/hero-main.jpg', 'PRIME VINTAGE HERO', 'mixed', 'Prime Vintage — curated Y2K and vintage streetwear');
+  // category / offer imagery — real product photos, falls back to the generated placeholder if the file is missing
   window.PV_resolveImage(document.getElementById('catBundlesImg'), 'images/categories/bundles.jpg', 'BUNDLES', 'pink', 'Curated bundles for resellers');
   window.PV_resolveImage(document.getElementById('catPiecesImg'), 'images/categories/pieces.jpg', 'PIECES', 'blue', 'Individual vintage and Y2K pieces');
   window.PV_resolveImage(document.getElementById('offerImg'), 'images/promo/y2k-jeans-promo.jpg', 'Y2K JEANS', 'pink', 'Y2K jeans limited drop');
+
+  /* =========================================================
+     CAMPAIGN IMAGERY — externally sourced editorial photography
+     One place to manage every Unsplash/Pexels URL used on the page,
+     instead of scattering links through the markup. Paste the final
+     chosen photo URL into `src` (see the art-direction brief for
+     search links per section); leave it empty and the section falls
+     back to `fallback` (an existing real product photo) or, failing
+     that, the generated placeholder — the page never shows a broken
+     image while art direction is still in progress.
+  ========================================================== */
+  var CAMPAIGN_IMAGES = {
+    hero: {
+      src: '', // TODO: paste chosen Unsplash/Pexels URL (see brief: "HERO")
+      fallback: 'images/hero/hero-main.jpg',
+      seed: 'PRIME VINTAGE HERO', variant: 'mixed',
+      alt: 'Prime Vintage — curated Y2K and vintage streetwear'
+    },
+    drop: {
+      src: '', // TODO: paste chosen Unsplash/Pexels URL (see brief: "DROP")
+      fallback: null,
+      seed: 'NEXT DROP', variant: 'mixed',
+      alt: 'Underground fashion drop — limited pieces'
+    }
+  };
+  function resolveCampaignImage(imgEl, cfg){
+    if (!imgEl) return;
+    var chain = [cfg.src, cfg.fallback].filter(Boolean);
+    var i = 0;
+    function tryNext(){
+      if (i >= chain.length){ imgEl.onerror = null; imgEl.src = placeholderSVG(cfg.seed, cfg.variant, cfg.alt); return; }
+      imgEl.onerror = tryNext;
+      imgEl.src = chain[i++];
+    }
+    imgEl.alt = cfg.alt;
+    tryNext();
+  }
+  resolveCampaignImage(document.getElementById('heroImg'), CAMPAIGN_IMAGES.hero);
+  resolveCampaignImage(document.getElementById('dropImg'), CAMPAIGN_IMAGES.drop);
 
   /* =========================================================
      RENDER: BUNDLES + PIECES
@@ -1336,7 +1384,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     card.innerHTML =
       '<div class="media">' +
         '<span class="bundle-badge">' + p.count + ' PIECES</span>' +
-        '<img alt="">' +
+        '<img alt="" loading="lazy">' +
       '</div>' +
       '<div class="bundle-body">' +
         '<h3 class="bundle-name">' + p.title + '</h3>' +
@@ -1354,7 +1402,7 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
     card.innerHTML =
       '<div class="media">' +
         '<span class="piece-tag">' + p.category + '</span>' +
-        '<img alt="">' +
+        '<img alt="" loading="lazy">' +
         '<div class="piece-actions">' +
           '<button class="btn btn-primary" data-add="' + p.id + '">Add To Cart</button>' +
           '<button class="btn btn-outline on-light" data-qv="' + p.id + '">View Piece</button>' +
