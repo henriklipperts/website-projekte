@@ -36,6 +36,11 @@
   --ff-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
   --ease: cubic-bezier(.16,.84,.44,1);
   --header-h: 76px;
+  /* Filmic grain, reused on the hero and drop backdrops so both read as
+     shot-on-film editorial photography rather than clean catalog
+     product shots — the same noise technique already used for the
+     generated placeholder art, now doing real work on real photos. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
@@ -288,7 +293,16 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
 .hero-media{
   position:absolute; inset:0; z-index:0;
 }
-.hero-media img{ width:100%; height:100%; object-fit:cover; }
+/* Slightly crushed contrast and a touch less saturation: the raw product
+   photo is clean and bright, which reads as "catalog." Pulling it down
+   a notch is the difference between a product shot and a campaign
+   still — a small, deliberate grade rather than a filter for its own
+   sake. */
+.hero-media img{ width:100%; height:100%; object-fit:cover; filter:contrast(1.08) saturate(.88) brightness(.96); }
+.hero-media::before{
+  content:''; position:absolute; inset:0; z-index:1;
+  background-image: var(--grain); opacity:.05; mix-blend-mode:overlay; pointer-events:none;
+}
 .hero-media::after{
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.55) 62%, var(--black) 100%);
@@ -457,10 +471,15 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
    effect rather than a real decision, so it's gone. In its place: an
    actual campaign photo slot (see CAMPAIGN_IMAGES in the script), because
    a drop countdown reads as an event, not a settings panel, when there's
-   real atmosphere behind it. Falls back to the generated placeholder
-   until a real photo is supplied. */
+   real atmosphere behind it. Uses the same dark, high-contrast crop
+   treatment as the hero for a consistent "shot on film" mood, not a
+   flat product photo. */
 .drop-media{ position:absolute; inset:0; z-index:0; overflow:hidden; }
-.drop-media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.drop-media img{ width:100%; height:100%; object-fit:cover; display:block; filter:contrast(1.12) saturate(.75) brightness(.85); }
+.drop-media::before{
+  content:''; position:absolute; inset:0; z-index:1;
+  background-image: var(--grain); opacity:.06; mix-blend-mode:overlay; pointer-events:none;
+}
 .drop-media::after{
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(10,10,10,.55) 0%, rgba(10,10,10,.88) 100%);
@@ -1328,31 +1347,30 @@ section{ position:relative; scroll-margin-top: var(--header-h); }
   window.PV_resolveImage(document.getElementById('offerImg'), 'images/promo/y2k-jeans-promo.jpg', 'Y2K JEANS', 'pink', 'Y2K jeans limited drop');
 
   /* =========================================================
-     CAMPAIGN IMAGERY — externally sourced editorial photography
-     One place to manage every Unsplash/Pexels URL used on the page,
-     instead of scattering links through the markup. Paste the final
-     chosen photo URL into `src` (see the art-direction brief for
-     search links per section); leave it empty and the section falls
-     back to `fallback` (an existing real product photo) or, failing
-     that, the generated placeholder — the page never shows a broken
-     image while art direction is still in progress.
-
-     hero / drop have no equivalent real photo today, so they fall
-     straight to the placeholder until a src is chosen. bundlesPanel /
-     piecesPanel already have a real product photo as a solid default —
-     an external photo here is an upgrade to consider, not a fix for
-     something broken.
+     CAMPAIGN IMAGERY — one place to manage every non-product photo
+     used on the page, instead of scattering paths through the markup.
+     External Unsplash/Pexels sourcing was the original plan (`src`),
+     but this environment's network sandbox blocks every image/media
+     domain outright (Unsplash, Pexels, Pixabay, even Wikipedia —
+     verified, not assumed), with no browser tool available to route
+     around it. Rather than guess a photo ID from memory and risk a
+     broken or wrong image in a client-facing demo, hero and drop use
+     real supplied product photography as `fallback`, re-cropped and
+     graded (see .hero-media/.drop-media filters) to read as editorial
+     campaign stills rather than product shots. `src` stays wired and
+     empty: dropping in a real Unsplash/Pexels URL later is still a
+     one-line change, no other code involved.
   ========================================================== */
   var CAMPAIGN_IMAGES = {
     hero: {
-      src: '', // TODO: paste chosen Unsplash/Pexels URL (see brief: "HERO")
+      src: '', // external campaign photo not available in this environment (see chat) — real photo used instead
       fallback: 'images/hero/hero-main.jpg',
       seed: 'PRIME VINTAGE HERO', variant: 'mixed',
       alt: 'Prime Vintage — curated Y2K and vintage streetwear'
     },
     drop: {
-      src: '', // TODO: paste chosen Unsplash/Pexels URL (see brief: "DROP")
-      fallback: null,
+      src: '', // external campaign photo not available in this environment (see chat) — real photo used instead
+      fallback: 'images/drop/next-drop-bg.jpg',
       seed: 'NEXT DROP', variant: 'mixed',
       alt: 'Underground fashion drop — limited pieces'
     },
